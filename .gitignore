@@ -1,0 +1,22 @@
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Maven
+target/
+
+# Gradle (hvis du bruker gradle også)
+.gradle/
+build/
+
+# OS
+.DS_Store
+
+# Logs
+*.log
+
+# Env/secrets
+.env
+application-local.properties
+application-dev.properties
