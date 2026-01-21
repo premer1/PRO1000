@@ -6,10 +6,6 @@ out/
 # Maven
 target/
 
-# Gradle (hvis du bruker gradle også)
-.gradle/
-build/
-
 # OS
 .DS_Store
 
