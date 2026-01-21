@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
+@source "../static/*.html";
+
+:root {
+
+    /* bg-colors */
+
+
+    /* shadows */
+    --shadow-s:
+            inset 0 1px 2px #ffffff20,
+            0 1px 2px #00000030,
+            0 2px 4px #00000015;
+
+    --shadow-m:
+            inset 0 1px 2px #ffffff50,
+            0 1px 2px #00000030,
+            0 2px 4px #00000015;
+
+    --shadow-l:
+            inset 0 1px 2px #ffffff70,
+            0 1px 2px #00000030,
+            0 2px 4px #00000015;
+
+    --shadow-right: 8px 0 16px #00000015;
+
+    --font-text: "Inter", sans-serif;
+    --font-header: "Playfair Display", serif;
+}

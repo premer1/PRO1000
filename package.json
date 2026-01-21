@@ -1,0 +1,19 @@
+{
+  "name": "project-main",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "npx @tailwindcss/cli -i ./src/main/resources/css/input.css -o ./src/main/resources/static/style.css --watch",
+    "build": "npx @tailwindcss/cli -i ./src/main/resources/css/input.css -o ./src/main/resources/static/style.css"
+  },
+
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.18",
+    "tailwindcss": "^4.1.18"
+  }
+}
