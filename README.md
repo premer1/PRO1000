@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PRO1000
 Praktisk Prosjektarbeid USN Bø - Gruppe semesteroppgave 
 
@@ -45,3 +46,6 @@ Risiko
     • Teknisk risiko: Utfordringer med integrasjon mellom Next.js og Supabase. (Tiltak: Tidlig prototyping).
     • Tidsrisiko: For mye tid brukes på innhold og tekst fremfor systemlogikk. (Tiltak: Bruke AI til generering av innhold).
     • Omfangskryp (Scope Creep): Ønske om å legge til for mange funksjoner. (Tiltak: Streng prioritering i backlogen).
+=======
+# Project
+>>>>>>> e75c053 (Intial commit)
