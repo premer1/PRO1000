@@ -7,7 +7,6 @@
     "watch": "npx @tailwindcss/cli -i ./src/main/resources/css/input.css -o ./src/main/resources/static/style.css --watch",
     "build": "npx @tailwindcss/cli -i ./src/main/resources/css/input.css -o ./src/main/resources/static/style.css"
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",
