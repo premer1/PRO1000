@@ -26,7 +26,6 @@ export default function Sidebar() {
                 </div>
 
                 <ul className="flex flex-col gap-1 px-3 mt-4">
-                    {/* Bruk .map() for å generere lenkene dynamisk */}
                     {navItems.map((item) => (
                         <li key={item.path}>
                             <Link

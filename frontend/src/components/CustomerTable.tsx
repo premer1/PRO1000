@@ -1,42 +1,66 @@
 import { useState, useEffect } from 'react';
 
-// Kunde
+interface PageRespons<T> {
+    content: T[];
+    totalPages: number;
+    totalElements: number;
+    size: number;
+    number: number;
+}
+
 interface Customer {
-    customerNumber: string;
-    name: string;
+    customerNo: string;
+    companyName: string;
+    firstName: string;
+    lastName: string;
     email: string;
     phone: string;
 }
 
 export default function CustomerTable() {
-
     const [customers, setCustomers] = useState<Customer[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Simuler henting av data fra backend
     useEffect(() => {
-        // fetch('http://localhost:5000/api/customers')
-        const mockData: Customer[] = [
-            { customerNumber: "1001", name: "Ola Nordmann", email: "ola@bedrift.no", phone: "990 01 122" },
-            { customerNumber: "1002", name: "Kari Jensen", email: "kari@design.no", phone: "445 56 677" },
-            { customerNumber: "1003", name: "Bernt Hansen", email: "bernt@it-service.com", phone: "900 11 223" },
-        ];
+        const fetchCustomers = async () => {
+            try {
+                setLoading(true);
+                const res = await fetch("http://localhost:8080/api/customers?page=0&size=10");
 
-        setTimeout(() => {
-            setCustomers(mockData);
-            setLoading(false);
-        }, 500); // forsinkelse for å simulere nettverk
+                if (!res.ok) {
+                    throw new Error("Kunne ikke koble til serveren");
+                }
+
+                const json = (await res.json()) as PageRespons<Customer>;
+
+                // setter 'json.content' i state, fordi det er der selve listen bor
+                setCustomers(json.content);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : "Noe gikk galt");
+                console.error("Fetch error:", err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCustomers();
     }, []);
+
+    if (error) {
+        return <div className="p-6 text-red-500 bg-red-900/20 rounded-lg">Feil: {error}</div>;
+    }
 
     return (
         <div className="space-y-6">
-            {/* Tabell-container */}
             <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden">
                 <table className="w-full text-left border-collapse">
                     <thead>
                     <tr className="bg-slate-800/50 text-slate-400 text-xs uppercase tracking-wider">
                         <th className="px-6 py-4 font-semibold">Kundenr</th>
+                        <th className="px-6 py-4 font-semibold">Bedrift</th>
                         <th className="px-6 py-4 font-semibold">Navn</th>
+                        <th className="px-6 py-4 font-semibold">Etternavn</th>
                         <th className="px-6 py-4 font-semibold">E-post</th>
                         <th className="px-6 py-4 font-semibold">Telefon</th>
                         <th className="px-6 py-4 font-semibold"></th>
@@ -46,14 +70,22 @@ export default function CustomerTable() {
                     {loading ? (
                         <tr>
                             <td colSpan={5} className="px-6 py-10 text-center text-slate-500 italic">
-                                Laster inn kunder...
+                                Henter data fra API...
+                            </td>
+                        </tr>
+                    ) : customers.length === 0 ? (
+                        <tr>
+                            <td colSpan={5} className="px-6 py-10 text-center text-slate-500">
+                                Ingen kunder funnet i databasen.
                             </td>
                         </tr>
                     ) : (
                         customers.map((customer) => (
-                            <tr key={customer.customerNumber} className="hover:bg-slate-800/30 transition-colors group">
-                                <td className="px-6 py-4 text-sm font-mono text-blue-400">{customer.customerNumber}</td>
-                                <td className="px-6 py-4 text-sm font-medium text-slate-200">{customer.name}</td>
+                            <tr key={customer.customerNo} className="hover:bg-slate-800/30 transition-colors group">
+                                <td className="px-6 py-4 text-sm font-mono text-blue-400">{customer.customerNo}</td>
+                                <td className="px-6 py-4 text-sm font-medium text-slate-200">{customer.companyName}</td>
+                                <td className="px-6 py-4 text-sm font-medium text-slate-200">{customer.firstName}</td>
+                                <td className="px-6 py-4 text-sm font-medium text-slate-200">{customer.lastName}</td>
                                 <td className="px-6 py-4 text-sm text-slate-400">{customer.email}</td>
                                 <td className="px-6 py-4 text-sm text-slate-400">{customer.phone}</td>
                                 <td className="px-6 py-4 text-right">
