@@ -12,6 +12,9 @@ public class Customer {
     @Column(name = "customer_no", nullable = false, unique = true)
     public long customerNo;
 
+    @Column(name = "company_name", nullable = false)
+    private String companyName;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
@@ -28,8 +31,9 @@ public class Customer {
 
     }
 
-    public Customer(Long customerNo, String firstName, String lastName, String email, Long phone) {
+    public Customer(Long customerNo, String companyName, String firstName, String lastName, String email, Long phone) {
         this.customerNo = customerNo;
+        this.companyName = companyName
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -39,6 +43,9 @@ public class Customer {
     public Long getId() {return id;}
     public long getCustomerNo() {return customerNo;}
     public void setCustomerNo(Long customerNo) {this.customerNo = customerNo;}
+
+    public String getCompanyName() {return companyName;}
+    public void setCompanyName(String companyName) {this.companyName = companyName;}
 
     public String getFirstName() {return firstName;}
     public void setFirstName(String firstName) {this.firstName = firstName;}

@@ -16,6 +16,7 @@ export function ListCustomers() {
         <div className="w-full">
             <div className="grid grid-cols-[.5fr_1fr_1fr_1fr_0.5fr] gap-4 px-4 py-2 text-sm text-black border-b border-black/10">
                 <div>Kundenr</div>
+                <div>Firma</div>
                 <div>Navn</div>
                 <div>E-post</div>
                 <div>Telefon</div>
