@@ -3,6 +3,9 @@ package com.example.crmproject.Customer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 
 @Service
 public class CustomerService {
@@ -33,4 +36,8 @@ public class CustomerService {
         return repo.findByCustomerNo(customerNo)
                 .orElseThrow(() -> new IllegalArgumentException("Fant ikke kundenummer med kundenummer " + customerNo));
     }
+    public Page<Customer> getCustomers(Pageable pageable) {
+        return repo.findAll(pageable);
+    }
+
 }
