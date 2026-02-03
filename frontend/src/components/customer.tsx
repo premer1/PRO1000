@@ -30,7 +30,6 @@ export function ListCustomers() {
                         className="grid grid-cols-[0.5fr_1fr_1fr_1fr_0.5fr] gap-4 px-4 py-3 text-sm hover:bg-black/5"
                     >
                         <div className="text-black/70">{c.customerNo}</div>
-                        <div className="">{c.companyName}</div>
                         <div className="">
                             {c.firstName} {c.lastName}
                         </div>
