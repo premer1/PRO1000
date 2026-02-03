@@ -24,7 +24,10 @@ public class CustomerService {
 
     public Customer create(Customer customer) {
 
-        if (customer.getCustomerNo() < 10000) {
+
+        int customerNoAsInt = Integer.parseInt(customer.getCustomerNo());
+
+        if (customerNoAsInt < 10000) {
             throw new IllegalArgumentException("Kundenummerserien starter på 10000");
         }
         if (repo.existsByCustomerNo(customer.getCustomerNo())) {
@@ -32,7 +35,7 @@ public class CustomerService {
         }
         return repo.save(customer);
     }
-    public Customer getByCustomerNo(long customerNo) {
+    public Customer getByCustomerNo(String customerNo) {
         return repo.findByCustomerNo(customerNo)
                 .orElseThrow(() -> new IllegalArgumentException("Fant ikke kundenummer med kundenummer " + customerNo));
     }

@@ -10,7 +10,7 @@ public class Customer {
     private Long id;
 
     @Column(name = "customer_no", nullable = false, unique = true)
-    public long customerNo;
+    public String customerNo;
 
     @Column(name = "company_name", nullable = false)
     private String companyName;
@@ -25,13 +25,13 @@ public class Customer {
     private String email;
 
     @Column(name = "phone", nullable = false, unique = true)
-    private Long phone;
+    private String phone;
 
     protected Customer() {
 
     }
 
-    public Customer(Long customerNo, String companyName, String firstName, String lastName, String email, Long phone) {
+    public Customer(String customerNo, String companyName, String firstName, String lastName, String email, String phone) {
         this.customerNo = customerNo;
         this.companyName = companyName;
         this.firstName = firstName;
@@ -41,8 +41,8 @@ public class Customer {
     }
 
     public Long getId() {return id;}
-    public long getCustomerNo() {return customerNo;}
-    public void setCustomerNo(Long customerNo) {this.customerNo = customerNo;}
+    public String getCustomerNo() {return customerNo;}
+    public void setCustomerNo(String customerNo) {this.customerNo = customerNo;}
 
     public String getCompanyName() {return companyName;}
     public void setCompanyName(String companyName) {this.companyName = companyName;}
@@ -56,8 +56,8 @@ public class Customer {
     public String getEmail() {return email;}
     public void setEmail(String email) {this.email = email;}
 
-    public Long getPhone() {return phone;}
-    public void setPhone(Long phone) {this.phone = phone;}
+    public String getPhone() {return phone;}
+    public void setPhone(String phone) {this.phone = phone;}
 
 }
 

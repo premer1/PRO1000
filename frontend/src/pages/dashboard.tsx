@@ -1,4 +1,4 @@
-import {ListCustomers} from "../components/customer.tsx";
+import {ListCustomers} from "../components/AddCustomer.tsx";
 
 export function Dashboard() {
     return (
