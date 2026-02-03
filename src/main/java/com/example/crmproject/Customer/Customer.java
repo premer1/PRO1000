@@ -33,7 +33,7 @@ public class Customer {
 
     public Customer(Long customerNo, String companyName, String firstName, String lastName, String email, Long phone) {
         this.customerNo = customerNo;
-        this.companyName = companyName
+        this.companyName = companyName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
