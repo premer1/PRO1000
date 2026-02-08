@@ -11,6 +11,7 @@ interface NavItem {
 const navItems: NavItem[] = [
     { label: "DashboardT", path: "/" },
     { label: "Kunder", path: "/customers" },
+    { label: "Saksliste", path: "/tickets"},
     { label: "Aktiviteter", path: "/activities" },
     { label: "Innstillinger", path: "/settings" },
 ];

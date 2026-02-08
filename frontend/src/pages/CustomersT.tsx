@@ -14,7 +14,7 @@ export default function CustomersT() {
             {/* Header */}
             <div className="flex justify-between items-center">
                 <div>
-                    <h1 className="text-2xl font-bold">Kundeliste</h1>
+                    <h1 className="text-2xl font-semibold">Kundeliste</h1>
                     <p className="text-slate-800 text-sm">Oversikt over alle registrerte kunder i systemet.</p>
                 </div>
                 <button

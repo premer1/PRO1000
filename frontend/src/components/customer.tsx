@@ -1,5 +1,5 @@
 import {useEffect, useState} from "react";
-import type { Customer, PageRespons } from "../types/customers.ts";
+import type { Customer, PageRespons } from "../types/Customers.ts";
 
 export function ListCustomers() {
     const [data, setData] = useState<PageRespons<Customer> | null>(null);

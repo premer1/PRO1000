@@ -1,12 +1,12 @@
-package com.example.crmproject.Tickets;
+package com.example.crmproject.TicketsType;
 
 import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
-@Table(name = "Tickets")
-public class Tickets {
+@Table(name = "TicketsType")
+public class TicketsType {
         @Id
         @GeneratedValue(strategy =
                 GenerationType.IDENTITY)
@@ -39,7 +39,7 @@ public class Tickets {
         private String phone;
 
         @Column(name =
-        "updated_last")
+                "updated_last")
         private Date updatedLast;
 
         @Column(name =
@@ -47,17 +47,26 @@ public class Tickets {
                 nullable = false)
         private Date created;
 
-        protected Tickets() {
+        public enum TicketStatus {
+                OPEN, IN_PROGRESS, WAITING, CLOSED
         }
 
-        public Tickets(
+        @Enumerated(EnumType.STRING)
+        @Column(name = "status", nullable = false)
+        private TicketStatus status = TicketStatus.OPEN;
+
+        protected TicketsType(){
+        }
+
+        public TicketsType(
                 Long ticketNo,
                 String description,
                 String companyName,
                 String email,
                 String phone,
                 Date updatedLast,
-                Date created) {
+                Date created,
+                String status ){
             this.ticketNo = ticketNo;
             this.description = description;
             this.companyName = companyName;
@@ -65,6 +74,7 @@ public class Tickets {
             this.phone = phone;
             this.updatedLast = updatedLast;
             this.created = created;
+            this.setStatus(status);
         }
 
         public Long getId() { return id; }
@@ -96,6 +106,18 @@ public class Tickets {
         public Date getCreated() {return created;}
         public void setCreated(Date created)
         {this.created = created;}
+
+        public TicketStatus getStatus() {return status;}
+        public void setStatus(String status) {
+                if (status == null || status.isBlank()) {
+                        this.status = TicketStatus.OPEN;
+                        return;
+                }
+                this.status = TicketStatus.valueOf(status.trim().toUpperCase());
+        }
+
+
+
 
 }
 
