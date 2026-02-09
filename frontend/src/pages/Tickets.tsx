@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { statusLabel } from "../types/TicketStatus.ts";
 import { Link } from "react-router-dom";
+import {CreateTicketForm} from "../components/CreateTicket.tsx";
 
 type Ticket = {
     id: number;
@@ -74,7 +75,7 @@ export default function TicketsTable() {
 
     const searchBox =
         "rounded-4xl bg-white p-3 outline-none shadow ring-1 ring-black/5 focus:ring-black/20";
-
+    const [open, setOpen] = useState(false);
     return (
         <div className="flex flex-col justify-start">
             <div className="w-200 py-20 flex justify-start items-center gap-10">
@@ -88,7 +89,14 @@ export default function TicketsTable() {
                     {loading && <span className="text-sm opacity-70">Søker…</span>}
                 </div>
                 <div>
-                    <button className={searchBox}>Opprett Ticket</button>
+                    <button
+                        className={searchBox}
+                        onClick={() => setOpen(true)}
+                    >
+                        Opprett ticket
+                    </button>
+                            {open && <CreateTicketForm onClose={() => setOpen(false)} />
+                            }
                 </div>
 
                 {error && <div className="text-sm">Feil: {error}</div>}

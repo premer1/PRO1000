@@ -33,9 +33,8 @@ public class TicketController {
     }
 
     @PostMapping
-    public ResponseEntity<Tickets> addTicket(@RequestBody Tickets tickets) {
-        Tickets created = service.addTickets(tickets);
-        return ResponseEntity.status(HttpStatus.CREATED).body(created);
+    public Tickets create(@RequestBody Tickets.CreateTicketRequest req) {
+        return service.create(req);
     }
 
 };

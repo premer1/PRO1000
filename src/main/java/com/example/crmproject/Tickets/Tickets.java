@@ -1,8 +1,10 @@
 package com.example.crmproject.Tickets;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
-import java.util.Date;
+import java.time.Instant;
 
 @Entity
 @Table(name = "Tickets")
@@ -38,14 +40,16 @@ public class Tickets {
                 nullable = false)
         private String phone;
 
-        @Column(name =
-                "updated_last")
-        private Date updatedLast;
-
+        @CreationTimestamp
         @Column(name =
                 "created",
                 nullable = false)
-        private Date created;
+        private Instant created;
+
+        @UpdateTimestamp
+        @Column(name =
+                "updated_last")
+        private Instant updatedLast;
 
         public enum TicketStatus {
                 OPEN, IN_PROGRESS, WAITING, CLOSED
@@ -64,8 +68,8 @@ public class Tickets {
                 String companyName,
                 String email,
                 String phone,
-                Date updatedLast,
-                Date created,
+                Instant updatedLast,
+                Instant created,
                 String status ){
             this.ticketNo = ticketNo;
             this.description = description;
@@ -99,12 +103,19 @@ public class Tickets {
         public void setPhone(String phone)
         {this.phone = phone;}
 
-        public Date getUpdatedLast() {return updatedLast;}
-        public void setUpdatedLast(Date updatedLast)
+        public record CreateTicketRequest(
+                String description,
+                String companyName,
+                String email,
+                String phone
+        ) {}
+
+        public Instant getUpdatedLast() {return updatedLast;}
+        public void setUpdatedLast(Instant updatedLast)
         {this.updatedLast = updatedLast;}
 
-        public Date getCreated() {return created;}
-        public void setCreated(Date created)
+        public Instant getCreated() {return created;}
+        public void setCreated(Instant created)
         {this.created = created;}
 
         public TicketStatus getStatus() {return status;}
@@ -115,8 +126,6 @@ public class Tickets {
                 }
                 this.status = TicketStatus.valueOf(status.trim().toUpperCase());
         }
-
-
 
 
 }

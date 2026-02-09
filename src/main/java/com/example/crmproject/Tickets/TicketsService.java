@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -50,5 +52,19 @@ public class TicketsService {
                 (q, q, q, pageable);
     }
 
+    public Tickets create(Tickets.CreateTicketRequest req) {
+        Tickets t = new Tickets();
+        t.setDescription(req.description());
+        t.setCompanyName(req.companyName());
+        t.setEmail(req.email());
+        t.setPhone(req.phone());
+
+        Long nextNo = repo.findMaxTicketNo() + 1;
+        t.setTicketNo(nextNo);
+
+        t.setStatus(String.valueOf(Tickets.TicketStatus.OPEN));
+
+        return repo.save(t);
+    }
 
 }
