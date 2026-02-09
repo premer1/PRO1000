@@ -1,4 +1,4 @@
-package com.example.crmproject.TicketsType;
+package com.example.crmproject.Tickets;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,31 +18,31 @@ public class TicketsService {
         this.repo = repo;
     }
 
-    public List<TicketsType> getAll() {
+    public List<Tickets> getAll() {
         return repo.findAll();
     }
 
-    public TicketsType addTickets(TicketsType ticket) {
+    public Tickets addTickets(Tickets ticket) {
         return repo.save(ticket);
     }
 
-    public TicketsType updateTickets(TicketsType ticket) {
+    public Tickets updateTickets(Tickets ticket) {
         return repo.save(ticket);
     }
 
     @GetMapping("/{id}")
-    public TicketsType getOne(@PathVariable Long id) {
+    public Tickets getOne(@PathVariable Long id) {
         return repo.findById(id).orElseThrow();
     }
 
-    public TicketsType getByTicketNo(Long ticketNo) {
+    public Tickets getByTicketNo(Long ticketNo) {
         return repo.findByTicketNo(ticketNo)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Fant ikke saksnummer: " + ticketNo
                 ));
     }
 
-    public Page<TicketsType> search(String q, Pageable pageable) {
+    public Page<Tickets> search(String q, Pageable pageable) {
         if (q == null || q.isBlank()) {
             return repo.findAll(pageable);
         }

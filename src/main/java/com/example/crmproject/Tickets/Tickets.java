@@ -1,12 +1,12 @@
-package com.example.crmproject.TicketsType;
+package com.example.crmproject.Tickets;
 
 import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
-@Table(name = "TicketsType")
-public class TicketsType {
+@Table(name = "Tickets")
+public class Tickets {
         @Id
         @GeneratedValue(strategy =
                 GenerationType.IDENTITY)
@@ -55,10 +55,10 @@ public class TicketsType {
         @Column(name = "status", nullable = false)
         private TicketStatus status = TicketStatus.OPEN;
 
-        protected TicketsType(){
+        protected Tickets(){
         }
 
-        public TicketsType(
+        public Tickets(
                 Long ticketNo,
                 String description,
                 String companyName,

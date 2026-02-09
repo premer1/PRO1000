@@ -1,4 +1,4 @@
-package com.example.crmproject.TicketsType;
+package com.example.crmproject.Tickets;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +15,7 @@ public class TicketController {
     public TicketController(TicketsService service) {this.service = service; }
 
     @GetMapping
-    public Page<TicketsType> list(
+    public Page<Tickets> list(
             @RequestParam(required = false) String q,
             @PageableDefault(size = 20) Pageable pageable
     ) {
@@ -23,18 +23,18 @@ public class TicketController {
     }
 
     @GetMapping("/{id}")
-    public TicketsType getOne(@PathVariable Long id) {
+    public Tickets getOne(@PathVariable Long id) {
         return service.getOne(id);
     }
 
     @GetMapping("/by-ticket-no/{ticketNo}")
-    public TicketsType byTicketNo(@PathVariable Long ticketNo) {
+    public Tickets byTicketNo(@PathVariable Long ticketNo) {
         return service.getByTicketNo(ticketNo);
     }
 
     @PostMapping
-    public ResponseEntity<TicketsType> addTicket(@RequestBody TicketsType tickets) {
-        TicketsType created = service.addTickets(tickets);
+    public ResponseEntity<Tickets> addTicket(@RequestBody Tickets tickets) {
+        Tickets created = service.addTickets(tickets);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
