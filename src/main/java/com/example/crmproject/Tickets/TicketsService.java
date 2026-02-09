@@ -1,23 +1,22 @@
 package com.example.crmproject.Tickets;
 
+import com.example.crmproject.Customer.Customer;
+import com.example.crmproject.Customer.CustomerRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class TicketsService {
     private final TicketsRepository repo;
+    private final CustomerRepository customerRepo;
 
-    public TicketsService(TicketsRepository repo) {
+    public TicketsService(TicketsRepository repo, CustomerRepository customerRepo) {
         this.repo = repo;
+        this.customerRepo = customerRepo;
     }
 
     public List<Tickets> getAll() {
@@ -30,11 +29,6 @@ public class TicketsService {
 
     public Tickets updateTickets(Tickets ticket) {
         return repo.save(ticket);
-    }
-
-    @GetMapping("/{id}")
-    public Tickets getOne(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow();
     }
 
     public Tickets getByTicketNo(Long ticketNo) {
@@ -67,4 +61,19 @@ public class TicketsService {
         return repo.save(t);
     }
 
+    public List<String> suggestCompanyNames(String q) {
+        if (q == null || q.trim().length() < 2) return List.of();
+
+        return customerRepo
+                .findTop10ByCompanyNameContainingIgnoreCaseOrderByCompanyNameAsc(q.trim())
+                .stream()
+                .map(Customer::getCompanyName)
+                .distinct()
+                .toList();
+    }
+
+    public Tickets getById(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket ikke funnet: " + id));
+    }
 }
