@@ -10,7 +10,6 @@ export function TicketOpen() {
     const { ticketNo } = useParams<{ ticketNo: string }>();
     const [open, setOpen] = useState<boolean>(false);
     const toggleOpen = () => setOpen((prev) => !prev);
-    const [status, setStatus] = useState<TicketStatus>("OPEN");
     const [ticket, setTicket] = useState<TicketsType | null>(null);
     const [error, setError] = useState<string | null>(null);
 
