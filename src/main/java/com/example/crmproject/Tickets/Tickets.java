@@ -70,7 +70,7 @@ public class Tickets {
                 String phone,
                 Instant updatedLast,
                 Instant created,
-                String status ){
+                TicketStatus status ){
             this.ticketNo = ticketNo;
             this.description = description;
             this.companyName = companyName;
@@ -119,12 +119,12 @@ public class Tickets {
         {this.created = created;}
 
         public TicketStatus getStatus() {return status;}
-        public void setStatus(String status) {
-                if (status == null || status.isBlank()) {
+        public void setStatus(TicketStatus status) {
+                if (status == null) {
                         this.status = TicketStatus.OPEN;
                         return;
                 }
-                this.status = TicketStatus.valueOf(status.trim().toUpperCase());
+                this.status = status;
         }
 
 

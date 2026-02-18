@@ -19,4 +19,5 @@ export type TicketsType = {
     phone: string;
     created: string;
     updatedLast?: string;
+    status: string;
 }

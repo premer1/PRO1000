@@ -27,10 +27,6 @@ public class TicketsService {
         return repo.save(ticket);
     }
 
-    public Tickets updateTickets(Tickets ticket) {
-        return repo.save(ticket);
-    }
-
     public Tickets getByTicketNo(Long ticketNo) {
         return repo.findByTicketNo(ticketNo)
                 .orElseThrow(() -> new ResponseStatusException(
@@ -56,7 +52,7 @@ public class TicketsService {
         Long nextNo = repo.findMaxTicketNo() + 1;
         t.setTicketNo(nextNo);
 
-        t.setStatus(String.valueOf(Tickets.TicketStatus.OPEN));
+        t.setStatus(Tickets.TicketStatus.OPEN);
 
         return repo.save(t);
     }
@@ -75,5 +71,14 @@ public class TicketsService {
     public Tickets getById(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ticket ikke funnet: " + id));
+    }
+
+
+    public Tickets updateStatus(long ticketNo, TicketController.UpdateStatusRequest req) {
+        Tickets t = repo.findByTicketNo(ticketNo)
+            .orElseThrow(() -> new RuntimeException("Ticket not found: " + ticketNo));
+        t.setStatus(req.status());
+        return repo.save(t);
+
     }
 }

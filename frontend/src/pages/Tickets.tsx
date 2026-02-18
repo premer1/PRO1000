@@ -103,39 +103,48 @@ export default function TicketsTable() {
             </div>
 
             <div className="flex flex-col justify-start items-start">
-                <table>
+                <table className="w-full table-fixed border-separate border-spacing-0">
                     <thead>
-                    <tr>
-                        <th className="text-left">Saksnr</th>
-                        <th className="text-left px-4">Bedrift</th>
-                        <th className="text-left px-4">Beskrivelse</th>
-                        <th className="text-left px-4">E-post</th>
-                        <th className="text-left px-4">Telefon</th>
-                        <th className="text-left px-4">Status</th>
+                    <tr className="text-left text-sm opacity-80">
+                        <th className="px-4 py-2 w-[90px]">Saksnr</th>
+                        <th className="px-4 py-2 w-[180px]">Bedrift</th>
+                        <th className="px-4 py-2">Beskrivelse</th>
+                        <th className="px-4 py-2 w-[220px]">E-post</th>
+                        <th className="px-4 py-2 w-[140px]">Telefon</th>
+                        <th className="px-4 py-2 w-[140px]">Status</th>
                     </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody className="text-sm">
                     {tickets.length === 0 ? (
                         <tr>
-                            <td colSpan={6}>Ingen tickets</td>
+                            <td colSpan={6} className="px-4 py-3 opacity-70">
+                                Ingen tickets
+                            </td>
                         </tr>
                     ) : (
                         tickets.map((t) => (
-                            <tr key={t.id} className="hover:bg-black/5">
-                                <td className="relative">
+                            <tr key={t.id} className="group">
+                                <td colSpan={6} className="p-0 border-t border-black/10">
                                     <Link
                                         to={`/tickets/${t.ticketNo}`}
-                                        className="absolute inset-0"
+                                        className="
+                grid grid-cols-[90px_180px_1fr_220px_140px_140px]
+                items-center gap-4
+                px-4 py-3
+                transition
+                hover:bg-black/5
+              "
                                         aria-label={`Åpne ticket ${t.ticketNo}`}
-                                    />
-                                    {t.ticketNo}
+                                    >
+                                        <span className="truncate">{t.ticketNo}</span>
+                                        <span className="truncate">{t.companyName}</span>
+                                        <span className="truncate">{t.description}</span>
+                                        <span className="truncate">{t.email}</span>
+                                        <span className="truncate">{t.phone}</span>
+                                        <span className="truncate">{statusLabel(t.status)}</span>
+                                    </Link>
                                 </td>
-                                <td className="px-4">{t.companyName}</td>
-                                <td className="px-4">{t.description}</td>
-                                <td className="px-4">{t.email}</td>
-                                <td className="px-4">{t.phone}</td>
-                                <td className="px-4">{statusLabel(t.status)}</td>
                             </tr>
                         ))
                     )}

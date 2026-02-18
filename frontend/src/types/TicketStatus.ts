@@ -1,7 +1,7 @@
 export const STATUS_LABEL: Record<string, string> = {
     OPEN: "Åpen",
     IN_PROGRESS: "Pågår",
-    WAITING: "Venter",
+    WAITING: "Venter på oss",
     CLOSED: "Lukket",
 };
 

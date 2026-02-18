@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+
 import java.util.List;
 
 @RestController
@@ -44,5 +45,14 @@ public class TicketController {
     public Tickets create(@RequestBody Tickets.CreateTicketRequest req) {
         return service.create(req);
     }
+
+    public record UpdateStatusRequest(Tickets.TicketStatus status) {}
+
+    @PutMapping("/{ticketNo}/status")
+    public Tickets updateStatus(@PathVariable long ticketNo,
+                                @RequestBody UpdateStatusRequest req) {
+        return service.updateStatus(ticketNo, req);
+    }
+    
 }
 
