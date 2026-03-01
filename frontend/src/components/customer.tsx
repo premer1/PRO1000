@@ -1,13 +1,13 @@
 import {useEffect, useState} from "react";
-import type { Customer, PageRespons } from "../types/Customers.ts";
+import type { Customer, PageResponse } from "@/types/Customers";
 
 export function ListCustomers() {
-    const [data, setData] = useState<PageRespons<Customer> | null>(null);
+    const [data, setData] = useState<PageResponse<Customer> | null>(null);
 
     useEffect(() => {
         (async () => {
             const res = await fetch("http://localhost:8080/api/customers?page=0&size=10");
-            const json = (await res.json()) as PageRespons<Customer>;
+            const json = (await res.json()) as PageResponse<Customer>;
             setData(json);
         })();
     }, []);

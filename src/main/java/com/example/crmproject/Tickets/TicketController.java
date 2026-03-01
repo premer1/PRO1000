@@ -1,5 +1,6 @@
 package com.example.crmproject.Tickets;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -18,6 +19,13 @@ public class TicketController {
         this.service = service;
     }
 
-
+    @GetMapping
+    public Page<Tickets> findAll(Pageable pageable) {
+        return service.findAll(pageable);
+    }
+    @PostMapping
+    public Tickets create(@Valid @RequestBody Tickets.CreateTicketRequest req) {
+        return service.create(req);
+    }
 }
 

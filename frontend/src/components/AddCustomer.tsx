@@ -39,8 +39,8 @@ export default function AddCustomer({ isOpen, onClose, onCustomerAdded }: ModalP
                 const errorData = await response.json();
                 alert("Feil: " + (errorData.message || "Kunne ikke lagre kunde"));
             }
-        } catch (err) {
-            alert("Kunne ikke kontakte serveren. Sjekk at Spring Boot kjører.");
+        } catch (error) {
+            error("Kunne ikke kontakte serveren. Sjekk at Spring Boot kjører.");
         }
     };
 

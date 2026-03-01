@@ -1,6 +1,8 @@
 package com.example.crmproject.Tickets;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -19,6 +21,11 @@ public class Tickets {
                 nullable = false,
                 unique = true)
         private Long ticketNo;
+
+        @Column(name =
+                "subject",
+                nullable = false)
+        private String subject;
 
         @Column(name =
                 "description",
@@ -64,6 +71,7 @@ public class Tickets {
 
         public Tickets(
                 Long ticketNo,
+                String subject,
                 String description,
                 String companyName,
                 String email,
@@ -73,6 +81,7 @@ public class Tickets {
                 TicketStatus status ){
             this.ticketNo = ticketNo;
             this.description = description;
+            this.subject = subject;
             this.companyName = companyName;
             this.email = email;
             this.phone = phone;
@@ -86,6 +95,10 @@ public class Tickets {
         public Long getTicketNo() {return ticketNo;}
         public void setTicketNo(Long ticketNo)
         {this.ticketNo = ticketNo;}
+
+        public String getSubject() { return subject; }
+        public void setSubject(String subject)
+        {this.subject = subject;}
 
         public String getDescription() {return description;}
         public void setDescription(String description)
@@ -104,11 +117,12 @@ public class Tickets {
         {this.phone = phone;}
 
         public record CreateTicketRequest(
-                String description,
-                String companyName,
-                String email,
-                String phone
-        ) {}
+                @NotBlank String description,
+                @NotBlank String subject,
+                @NotBlank String companyName,
+                @NotBlank @Email String email,
+                @NotBlank String phone
+        ){}
 
         public Instant getUpdatedLast() {return updatedLast;}
         public void setUpdatedLast(Instant updatedLast)

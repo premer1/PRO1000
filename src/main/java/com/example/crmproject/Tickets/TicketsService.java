@@ -18,4 +18,21 @@ public class TicketsService {
         this.repo = repo;
         this.customerRepo = customerRepo;
     }
+
+    public Tickets create(Tickets.CreateTicketRequest req) {
+        Tickets t = new Tickets();
+        long nextTicketNo = repo.findMaxTicketNo() + 1;
+        t.setDescription(req.description());
+        t.setCompanyName(req.companyName());
+        t.setSubject(req.subject());
+        t.setEmail(req.email());
+        t.setPhone(req.phone());
+        t.setTicketNo(nextTicketNo);
+
+        return repo.save(t);
+    }
+
+    public Page<Tickets> findAll(Pageable pageable) {
+        return repo.findAll(pageable);
+    }
 }

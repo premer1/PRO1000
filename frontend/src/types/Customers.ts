@@ -8,7 +8,7 @@ export type Customer = {
     phone: string;
 };
 
-export type PageRespons<T> = {
+export type PageResponse<T> = {
     content: T[];
     TotalElements: number;
     totalPages: number;

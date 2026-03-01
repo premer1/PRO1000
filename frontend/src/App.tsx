@@ -2,12 +2,12 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from "./layouts/MainLayout";
-import DashboardT from "./pages/DashboardT.tsx";
-import CustomersT from "./pages/CustomersT.tsx";
+import DashboardT from "./pages/DashboardT";
+import CustomersT from "./pages/CustomersT";
 import Activities from "./pages/Activities";
 import Settings from "./pages/Settings";
-import Tickets from "./pages/Tickets.tsx";
-import {TicketOpen} from "./pages/TicketOpen.tsx";
+import Tickets from "./pages/Tickets";
+import {TicketOpen} from "./pages/TicketOpen";
 
 
 function App() {
