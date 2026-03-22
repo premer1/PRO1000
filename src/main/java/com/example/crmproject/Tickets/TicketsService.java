@@ -48,4 +48,11 @@ public class TicketsService {
         ticket.setUpdatedLast(Instant.now());
         return repo.save(ticket);
     }
+
+    public long countTicketsByStatus(Tickets.TicketStatus status) {
+        return repo.countByStatus(status);
+    }
+    public long countNotClosedTickets() {
+        return repo.countByStatusNot(Tickets.TicketStatus.CLOSED);
+    }
 }

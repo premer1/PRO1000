@@ -26,6 +26,16 @@ public class TicketController {
         return service.getByTicketNo(ticketNo);
     }
 
+    @GetMapping("/count")
+    public long countTicketsByStatus(@RequestParam Tickets.TicketStatus status) {
+        return service.countTicketsByStatus(status);
+    }
+
+    @GetMapping("/count/not-closed")
+    public long countNotClosed() {
+        return service.countNotClosedTickets();
+    }
+
     @PostMapping
     public Tickets create(@Valid @RequestBody Tickets.CreateTicketRequest req) {
         return service.create(req);
@@ -36,7 +46,9 @@ public class TicketController {
 
     @PutMapping("/{ticketNo}")
     public Tickets updateStatus(@PathVariable Long ticketNo, @RequestBody UpdateTicketStatusRequest request) {
-        return service.updateStatus(ticketNo, request.status);
+        return service.updateStatus(ticketNo, request.status());
     }
+
+
 }
 
