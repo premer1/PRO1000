@@ -46,21 +46,21 @@ export default function CountTickets() {
                 <Button className="text-lg p-6" onClick={() => navigate("/tickets")}>Gå til Tickets</Button>
             </div>
             <div className="grid grid-cols-[200px_200px] gap-6 w-fit">
-                <div className="flex flex-col border rounded-4xl h-fit w-fit px-10 py-4 shadow-md gap-4 border-gray-200 text-2xl items-center justify-center">
+                <div className="flex flex-col border rounded-4xl h-fit w-fit px-10 py-4 shadow-md gap-4 border-gray-200 text-lg items-center justify-center">
                     <h1>Totalt antall åpne Tickets:</h1>
-                    <p className="text-3xl">{allOpenTickets}</p>
+                    <p className="text-xl">{allOpenTickets}</p>
                 </div>
-                <div className="flex flex-col border rounded-4xl h-fit w-fit gap-4 px-10 py-4 shadow-md border-gray-200 text-2xl items-center justify-center">
+                <div className="flex flex-col border rounded-4xl h-fit w-fit gap-4 px-10 py-4 shadow-md border-gray-200 text-lg items-center justify-center">
                     <h1>Tickets med status åpen:</h1>
-                    <p className="text-3xl">{statusOpen}</p>
+                    <p className="text-xl">{statusOpen}</p>
                 </div>
-                <div className="flex flex-col border rounded-4xl h-fit w-fit gap-4 px-10 py-4 shadow-md border-gray-200 text-2xl items-center justify-center">
+                <div className="flex flex-col border rounded-4xl h-fit w-fit gap-4 px-10 py-4 shadow-md border-gray-200 text-lg items-center justify-center">
                     <h1>Tickets med status venter:</h1>
-                    <p className="text-3xl">{statusWaiting}</p>
+                    <p className="text-xl">{statusWaiting}</p>
                 </div>
-                <div className="flex flex-col border rounded-4xl h-fit w-fit gap-4 px-10 py-4 shadow-md border-gray-200 text-2xl items-center justify-center">
+                <div className="flex flex-col border rounded-4xl h-fit w-fit gap-4 px-10 py-4 shadow-md border-gray-200 text-lg items-center justify-center">
                     <h1>Tickets med status pågår:</h1>
-                    <p className="text-3xl">{statusInProgress}</p>
+                    <p className="text-xl">{statusInProgress}</p>
                 </div>
                 <div></div>
             </div>

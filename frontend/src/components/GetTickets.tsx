@@ -79,7 +79,7 @@ export function GetTickets() {
                     <TableBody className="text-lg">
                         {filteredTickets.map((ticket) => (
                         <TableRow key={ticket.id}
-                                  onClick={() => navigate(`/tickets/${ticket.ticketNo}`)}
+                                  onClick={() => navigate(`/tickets/${ticket.id}`)}
                                   className="cursor-pointer"
                         >
                             <TableCell className="font-medium">{ticket.ticketNo}</TableCell>

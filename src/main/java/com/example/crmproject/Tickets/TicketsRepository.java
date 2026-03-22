@@ -7,9 +7,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface TicketsRepository extends JpaRepository<Tickets, Long> {
-
     Optional<Tickets> findById(Long id);
-
     Optional<Tickets> findByTicketNo(Long ticketNo);
 
     long countByStatus(Tickets.TicketStatus status);

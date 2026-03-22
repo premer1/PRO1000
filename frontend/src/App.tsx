@@ -21,7 +21,7 @@ function App() {
             <Route path="tickets" element={<Tickets />} />
             <Route path="activities" element={<Activities />} />
             <Route path="settings" element={<Settings />} />
-            <Route path="/tickets/:ticketNo" element={<DisplayTickets />} />
+            <Route path="/tickets/:id" element={<DisplayTickets />} />
           </Route>
         </Routes>
       </BrowserRouter>

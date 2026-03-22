@@ -21,9 +21,9 @@ public class TicketController {
         return service.findAll();
     }
 
-    @GetMapping("/{ticketNo}")
-    public Tickets getByTicketNo(@PathVariable Long ticketNo) {
-        return service.getByTicketNo(ticketNo);
+    @GetMapping("/{id}")
+    public Tickets getById(@PathVariable Long id) {
+        return service.getById(id);
     }
 
     @GetMapping("/count")
@@ -44,9 +44,9 @@ public class TicketController {
     public record UpdateTicketStatusRequest(Tickets.TicketStatus status) {
     }
 
-    @PutMapping("/{ticketNo}")
-    public Tickets updateStatus(@PathVariable Long ticketNo, @RequestBody UpdateTicketStatusRequest request) {
-        return service.updateStatus(ticketNo, request.status());
+    @PutMapping("/{id}")
+    public Tickets updateStatus(@PathVariable Long id, @RequestBody UpdateTicketStatusRequest request) {
+        return service.updateStatus(id, request.status());
     }
 
 
