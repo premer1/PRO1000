@@ -98,7 +98,7 @@ export function GetTickets() {
                             <TableCell>{ticket.companyName}</TableCell>
                             <TableCell>{statusLabels[ticket.status]}</TableCell>
                             <TableCell className="hidden lg:block lg:place-content-center">
-                                <div>
+                                <div className="flex gap-1">
                                     <p>
                                         {new Date(ticket.updatedLast).toLocaleString("no-NO", {
                                                 day: "2-digit",
