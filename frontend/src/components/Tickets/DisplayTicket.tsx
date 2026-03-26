@@ -1,8 +1,7 @@
 import {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {Button} from "@/components/ui/button";
-import AddTicketsNotes from "@/components/AddTicketsNotes";
-import ViewNotes from "@/components/ViewNotes";
+import TicketNotes from "@/components/Tickets/AddNotes";
 
 type TicketStatus = "OPEN" | "IN_PROGRESS" | "WAITING" | "CLOSED";
 
@@ -85,7 +84,7 @@ export default function DisplayTickets() {
             }
 
             const updatedTicket = await response.json();
-            setTicketStatus(updatedTicket.status);
+            setTicket(updatedTicket);
         } catch (error) {
             console.error(error);
         }
@@ -94,7 +93,7 @@ export default function DisplayTickets() {
     return (
         <div className="flex flex-col items-center">
             {!ticket ? (
-                <p></p> // Ønsket ikke å gi beskjed til brukeren dersom det laster. Da dette ga dårlig opplevelse av systemet.
+                <p></p> // Ønsker ikke å gi beskjed til brukeren dersom det laster. Da dette ga dårlig opplevelse av systemet.
             ) : (
                 <div className="rounded-4xl mt-20 max-w-5xl w-full flex flex-col border h-fit shadow-md bg-white border-gray-200">
                     <div className="flex flex-col border-b p-6">
@@ -126,19 +125,19 @@ export default function DisplayTickets() {
                                 <h1 className="text-xl px-4">Kontaktinfo</h1>
                             </div>
                             <div className="mt-6 px-8 text-lg">
-                                <div className="flex gap-6">
+                                <div className="flex flex-col md:flex-row md:gap-6">
                                     <h1>Firmanavn:</h1>
                                     <p>{ticket.companyName}</p>
                                 </div>
-                                <div className="flex gap-6 mt-2">
+                                <div className="flex flex-col md:flex-row md:gap-6 mt-2">
                                     <h1 className="">Navn:</h1>
                                     <p>{ticket.contactName}</p>
                                 </div>
-                                <div className="flex gap-6 mt-2">
+                                <div className="flex flex-col md:flex-row md:gap-6 mt-2">
                                     <h1>Telefon:</h1>
                                     <p> {ticket.phone}</p>
                                 </div>
-                                <div className="flex gap-6 mt-2 text-nowrap">
+                                <div className="flex flex-col md:flex-row md:gap-6 mt-2">
                                     <h1>E-post:</h1>
                                     <p>{ticket.email}</p>
                                 </div>
@@ -146,22 +145,32 @@ export default function DisplayTickets() {
                         </div>
 
                         {/* Boksene for opprettet og status */}
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             <div className="rounded-4xl border shadow-md border-gray-200 p-6 place-items-start text-lg place-content-center">
-                                    <h1 className="text-xl">Opprettet</h1>
-                                    <h1 className="mt-2">{new Date(ticket.created).toLocaleString("no-NO")}</h1>
+                                    <h1 className="text-xl">Opprettet:</h1>
+                                    <p className="mt-2">{new Date(ticket.created).toLocaleString("no-NO", {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                        })
+                                    }</p>
+                                <p className="mt-2">Kl. {new Date(ticket.created).toLocaleString("no-NO", {
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                })
+                                }</p>
                             </div>
                             <div className="rounded-4xl border shadow-md border-gray-200 p-6 place-items-start text-xl ">
-                                <h1 className="text-xl">Status</h1>
-                                <h1 className={`mt-2 ${statusTextClasses[ticket.status]}`}>{statusLabels[ticket.status]}</h1>
+                                <h1 className="text-xl">Status:</h1>
+                                <p className={`mt-2 ${statusTextClasses[ticket.status]}`}>{statusLabels[ticket.status]}</p>
                             </div>
 
                         </div>
 
                         {/* Boksen for å endre status */}
-                        <div className="rounded-4xl border shadow-md border-gray-200 p-6 place-items-start text-xl">
+                        <div className="rounded-4xl border shadow-md border-gray-200 p-6 text-xl">
                             <h1>Endre status:</h1>
-                            <div className="flex gap-3 mt-4">
+                            <div className="grid grid-cols-2 md:flex gap-3 place-content-center md:justify-start mt-4">
                                 <Button onClick={() => updateTicketStatus("OPEN")}>Åpen</Button>
                                 <Button onClick={() => updateTicketStatus("WAITING") }>Venter</Button>
                                 <Button onClick={() => updateTicketStatus("IN_PROGRESS")}>Pågår</Button>
@@ -174,12 +183,8 @@ export default function DisplayTickets() {
             )}
             {/* Vise notater og legg til knappen for å lagre */}
                 <div className="bg-white p-4 max-w-5xl w-full shadow-md rounded-4xl border-gray-200 mt-6">
-                    <div className="">
-                        <ViewNotes />
-                    </div>
-                    <div className="mt-4">
-                        <AddTicketsNotes />
-                    </div>
+                        <TicketNotes/>
+
                 </div>
 
         </div>

@@ -2,7 +2,7 @@ import CustomerTable from "../components/CustomerTable";
 import AddCustomer from "../components/AddCustomer";
 import {useState} from "react";
 
-export default function CustomersT() {
+export default function Customers() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const refreshData = () => {

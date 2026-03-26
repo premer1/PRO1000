@@ -1,6 +1,10 @@
 package com.example.crmproject.Customer;
 
+import com.example.crmproject.Tickets.Tickets;
 import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table (name = "Customer")
@@ -26,6 +30,9 @@ public class Customer {
 
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Tickets> tickets = new ArrayList<>();
 
     protected Customer() {
 

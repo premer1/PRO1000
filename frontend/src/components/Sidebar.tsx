@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 const navItems: NavItem[] = [
-    { label: "DashboardT", path: "/" },
+    { label: "Dashboard", path: "/" },
     { label: "Kunder", path: "/customers" },
     { label: "Tickets", path: "/tickets" },
     { label: "Aktiviteter", path: "/activities" },
