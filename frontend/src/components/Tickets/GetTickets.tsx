@@ -80,7 +80,7 @@ export function GetTickets() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="text-lg hidden lg:block md:place-content-center">Ticketnr.</TableHead>
+                            <TableHead className="text-lg hidden lg:block md:place-content-center">Nr.</TableHead>
                             <TableHead className="text-lg md:text-xl">Emne</TableHead>
                             <TableHead className="text-lg md:text-xl">Bedriftsnavn</TableHead>
                             <TableHead className="text-lg md:text-xl">Status</TableHead>
@@ -97,7 +97,24 @@ export function GetTickets() {
                             <TableCell>{ticket.subject}</TableCell>
                             <TableCell>{ticket.companyName}</TableCell>
                             <TableCell>{statusLabels[ticket.status]}</TableCell>
-                            <TableCell className="hidden lg:block lg:place-content-center">{new Date(ticket.updatedLast).toLocaleString("no-NO")}</TableCell>
+                            <TableCell className="hidden lg:block lg:place-content-center">
+                                <div>
+                                    <p>
+                                        {new Date(ticket.updatedLast).toLocaleString("no-NO", {
+                                                day: "2-digit",
+                                                month: "2-digit",
+                                                year: "numeric"
+                                            }
+                                        )}
+                                    </p>
+                                    <p>
+                                        {new Date(ticket.updatedLast).toLocaleString("no-NO", {
+                                            hour: "2-digit",
+                                            minute: "2-digit"
+                                        })}
+                                    </p>
+                                </div>
+                            </TableCell>
                         </TableRow>
                         ))}
                     </TableBody>
