@@ -1,5 +1,5 @@
-import CustomerTable from "../components/CustomerTable.tsx";
-import AddCustomer from "../components/AddCustomer.tsx";
+import CustomerTable from "../components/CustomerTable";
+import AddCustomer from "../components/AddCustomer";
 import {useState} from "react";
 
 export default function CustomersT() {
