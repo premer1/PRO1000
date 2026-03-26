@@ -1,7 +1,7 @@
-import CountTickets from "@/components/CountTickets";
+import CountTickets from "@/components/Tickets/CountTickets";
 
 
-const DashboardT = () => {
+const Dashboard = () => {
     return (
 <>
         <header className="flex flex-col items-center justify-center font-bold text-3xl">
@@ -18,4 +18,4 @@ const DashboardT = () => {
     )
 };
 
-export default DashboardT;
+export default Dashboard;

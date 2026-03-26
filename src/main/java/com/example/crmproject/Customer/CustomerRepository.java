@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface CustomerRepository extends JpaRepository<Customer, Long> {
 
     Optional<Customer> findByCustomerNo(String customerNo);
+    Optional<Customer> findById(Long id);
 
     boolean existsByCustomerNo(String customerNo);
     boolean existsByCustomerNoAndIdNot(String customerNo, Long id);

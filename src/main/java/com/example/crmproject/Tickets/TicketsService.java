@@ -1,5 +1,7 @@
 package com.example.crmproject.Tickets;
 
+import com.example.crmproject.Customer.Customer;
+import com.example.crmproject.Customer.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -8,12 +10,17 @@ import java.util.List;
 @Service
 public class TicketsService {
     private final TicketsRepository repo;
+    private final CustomerRepository customerRepo;
 
-    public TicketsService(TicketsRepository repo) {
+    public TicketsService(TicketsRepository repo, CustomerRepository customerRepo) {
         this.repo = repo;
+        this.customerRepo = customerRepo;
     }
 
     public Tickets create(Tickets.CreateTicketRequest req) {
+        Customer customer = customerRepo.findById(req.customerId())
+                .orElseThrow(() -> new RuntimeException("Customer not found"));
+
         Tickets t = new Tickets();
         long nextTicketNo = repo.findMaxTicketNo() + 1;
         t.setDescription(req.description());
@@ -25,6 +32,8 @@ public class TicketsService {
         t.setTicketNo(nextTicketNo);
         t.setCreated(Instant.now());
         t.setStatus(req.status());
+        t.setCustomer(customer);
+
 
         return repo.save(t);
     }

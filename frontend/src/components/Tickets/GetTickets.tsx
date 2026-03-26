@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Button} from "@/components/ui/button";
 import {useNavigate} from "react-router-dom";
+import {CreateTickets} from "@/components/Tickets/CreateTicket";
 
 type Ticket = {
     id: number,
@@ -15,6 +16,12 @@ type Ticket = {
 type TicketStatus = "OPEN" | "IN_PROGRESS" | "WAITING" | "CLOSED";
 
 export function GetTickets() {
+
+    const [showForm, setShowForm] = useState(false);
+
+    function openForm() {
+        setShowForm(prev => !prev); // Gjør at man kan åpne og lukke vinduet ved å trykke på nytt.
+    }
 
         const [tickets, setTickets] = useState<Ticket[]>([]);
         const [selectedStatus, setSelectedStatus] = useState("OPEN");
@@ -52,28 +59,32 @@ export function GetTickets() {
 
     return (
         <>
-            <div className="mt-20 bg-white rounded-2xl p-6 text-lg">
-                <Button
-                    className="mb-8"
-                    onChange={(e) => setSelectedStatus(e.target.value)}>
-                <select className="">
+            <div className="mt- bg-white rounded-2xl p-6 text-lg">
+                <div className="flex gap-4">
+                    <Button type="button" onClick={openForm}>Opprett Ticket</Button>
+                    <CreateTickets  showForm={showForm} />
+                    <Button
+                        className="mb-8"
+                        onChange={(e) => setSelectedStatus(e.target.value)}>
+                    <select className="">
 
-                        <option value="OPEN">Åpne</option>
-                        <option value="IN_PROGRESS">Pågår</option>
-                        <option value="WAITING">Venter</option>
-                        <option value="CLOSED">Lukket</option>
+                            <option value="OPEN">Åpne</option>
+                            <option value="IN_PROGRESS">Pågår</option>
+                            <option value="WAITING">Venter</option>
+                            <option value="CLOSED">Lukket</option>
 
 
-                </select>
-                </Button>
+                    </select>
+                    </Button>
+                </div>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead className="text-xl">Ticketnr.</TableHead>
-                            <TableHead className="text-xl">Emne</TableHead>
-                            <TableHead className="text-xl">Bedriftsnavn</TableHead>
-                            <TableHead className="text-xl">Status</TableHead>
-                            <TableHead className="text-xl">Sist oppdatert</TableHead>
+                            <TableHead className="text-lg hidden lg:block md:place-content-center">Ticketnr.</TableHead>
+                            <TableHead className="text-lg md:text-xl">Emne</TableHead>
+                            <TableHead className="text-lg md:text-xl">Bedriftsnavn</TableHead>
+                            <TableHead className="text-lg md:text-xl">Status</TableHead>
+                            <TableHead className="text-lg hidden lg:block md:place-content-center">Sist oppdatert</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody className="text-lg">
@@ -82,11 +93,11 @@ export function GetTickets() {
                                   onClick={() => navigate(`/tickets/${ticket.id}`)}
                                   className="cursor-pointer"
                         >
-                            <TableCell className="font-medium">{ticket.ticketNo}</TableCell>
+                            <TableCell className="font-medium hidden lg:block">{ticket.ticketNo}</TableCell>
                             <TableCell>{ticket.subject}</TableCell>
                             <TableCell>{ticket.companyName}</TableCell>
                             <TableCell>{statusLabels[ticket.status]}</TableCell>
-                            <TableCell>{new Date(ticket.updatedLast).toLocaleString("no-NO")}</TableCell>
+                            <TableCell className="hidden lg:block lg:place-content-center">{new Date(ticket.updatedLast).toLocaleString("no-NO")}</TableCell>
                         </TableRow>
                         ))}
                     </TableBody>
