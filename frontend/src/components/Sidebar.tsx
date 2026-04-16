@@ -1,51 +1,50 @@
-import { Link, useLocation } from "react-router-dom";
-import "../index.css";
-
-interface NavItem {
-    label: string;
-    path: string;
-}
+import { NavLink } from "react-router-dom";
+import { primaryNavItems } from "@/lib/navigation";
 
 interface SidebarProps {
-    onNavigate?: () => void;
+  onNavigate?: () => void;
 }
 
-const navItems: NavItem[] = [
-    { label: "Dashboard", path: "/" },
-    { label: "Kunder", path: "/customers" },
-    { label: "Tickets", path: "/tickets" },
-    { label: "Aktiviteter", path: "/activities" },
-    { label: "Innstillinger", path: "/settings" },
-];
-
 export default function Sidebar({ onNavigate }: SidebarProps) {
-    const location = useLocation();
+  return (
+    <nav className="flex h-full flex-col px-4 py-4">
+      <div className="mb-6 rounded-lg border border-white/10 bg-white/5 px-3 py-3">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-teal-200/80">CRM</p>
+        <h1 className="mt-2 text-xl font-semibold text-white" style={{ fontFamily: "var(--font-display)" }}>
+          Support Hub
+        </h1>
+      </div>
 
-    const isActive = (path: string) => {
-        if (path === "/") return location.pathname === "/";
-        return location.pathname.startsWith(path);
-    };
-
-    return (
-        <nav className="h-full px-3 py-4 text-xl">
-            <ul className="flex flex-col gap-1">
-                {navItems.map((item) => (
-                    <li key={item.path}>
-                        <Link
-                            to={item.path}
-                            onClick={onNavigate}
-                            aria-current={isActive(item.path) ? "page" : undefined}
-                            className={`block rounded-md px-4 py-2 text-center transition ${
-                                isActive(item.path)
-                                    ? "bg-slate-100 text-blue-600"
-                                    : "hover:bg-slate-50 hover:text-slate-500"
-                            }`}
-                        >
-                            {item.label}
-                        </Link>
-                    </li>
-                ))}
-            </ul>
-        </nav>
-    );
+      <div>
+        <p className="mb-3 px-3 text-[11px] font-semibold uppercase tracking-[0.32em] text-slate-500">Primærnavigasjon</p>
+        <ul className="space-y-2">
+          {primaryNavItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <li key={item.path}>
+                <NavLink
+                  to={item.path}
+                  end={item.path === "/"}
+                  onClick={onNavigate}
+                  className={({ isActive }) =>
+                    [
+                      "group flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium transition",
+                      isActive
+                        ? "bg-white text-slate-950"
+                        : "text-slate-300 hover:bg-white/6 hover:text-white",
+                    ].join(" ")
+                  }
+                >
+                  <div className="rounded-md border border-white/10 bg-white/5 p-1.5 transition group-hover:border-white/20 group-hover:bg-white/10">
+                    <Icon size={16} />
+                  </div>
+                  <span className="block">{item.label}</span>
+                </NavLink>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </nav>
+  );
 }

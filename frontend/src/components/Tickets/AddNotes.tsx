@@ -1,6 +1,6 @@
 import {Button} from "@/components/ui/button";
 import {Textarea} from "@/components/ui/textarea";
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 
 type Note = {
@@ -15,7 +15,7 @@ export default function TicketNotes() {
     const { id } = useParams();
 
     // Fetch på Notes fra databasen.
-    async function displayNotes() {
+    const displayNotes = useCallback(async () => {
         try {
             const response = await fetch(`http://localhost:8080/api/v1/tickets/${id}/notes`);
             if (!response.ok) throw new Error("failed to fetch notes");
@@ -24,7 +24,7 @@ export default function TicketNotes() {
         } catch (error) {
             console.log(error);
         }
-    }
+    }, [id]);
 
     async function handleSubmit() {
         try {
@@ -48,9 +48,9 @@ export default function TicketNotes() {
     // Refresh komponenten når det blir lagt til notat slik at den vises med engang.
     useEffect(() => {
         if (id) {
-            displayNotes();
+            void displayNotes();
         }
-    }, [id]);
+    }, [id, displayNotes]);
 
     return (
         <>

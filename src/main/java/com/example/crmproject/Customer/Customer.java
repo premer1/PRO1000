@@ -1,20 +1,24 @@
 package com.example.crmproject.Customer;
 
 import com.example.crmproject.Tickets.Tickets;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table (name = "Customer")
+@Table(name = "Customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "customer_no", nullable = false, unique = true)
-    public String customerNo;
+    private String customerNo;
 
     @Column(name = "company_name", nullable = false)
     private String companyName;
@@ -32,10 +36,18 @@ public class Customer {
     private String phone;
 
     @OneToMany(mappedBy = "customer")
+    @JsonIgnore
     private List<Tickets> tickets = new ArrayList<>();
 
-    protected Customer() {
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private Instant createdAt;
 
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    protected Customer() {
     }
 
     public Customer(String customerNo, String companyName, String firstName, String lastName, String email, String phone) {
@@ -47,24 +59,63 @@ public class Customer {
         this.phone = phone;
     }
 
-    public Long getId() {return id;}
-    public String getCustomerNo() {return customerNo;}
-    public void setCustomerNo(String customerNo) {this.customerNo = customerNo;}
+    public Long getId() {
+        return id;
+    }
 
-    public String getCompanyName() {return companyName;}
-    public void setCompanyName(String companyName) {this.companyName = companyName;}
+    public String getCustomerNo() {
+        return customerNo;
+    }
 
-    public String getFirstName() {return firstName;}
-    public void setFirstName(String firstName) {this.firstName = firstName;}
+    public void setCustomerNo(String customerNo) {
+        this.customerNo = customerNo;
+    }
 
-    public String getLastName() {return lastName;}
-    public void setLastName(String lastName) {this.lastName = lastName;}
+    public String getCompanyName() {
+        return companyName;
+    }
 
-    public String getEmail() {return email;}
-    public void setEmail(String email) {this.email = email;}
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
-    public String getPhone() {return phone;}
-    public void setPhone(String phone) {this.phone = phone;}
+    public String getFirstName() {
+        return firstName;
+    }
 
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
 }
-
