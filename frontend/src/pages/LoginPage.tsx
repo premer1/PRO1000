@@ -1,6 +1,6 @@
 import { ArrowRight, Headset, KeyRound, ShieldCheck, Sparkles, Ticket } from "lucide-react";
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -31,13 +31,48 @@ const featureCards = [
   },
 ];
 
+const heroWords = ["kunder", "tickets", "oppfølging"] as const;
+
 export default function LoginPage({ onUnlock }: LoginPageProps) {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
+  const [activeWordIndex, setActiveWordIndex] = useState(0);
+  const [activeCharCount, setActiveCharCount] = useState(0);
+  const [isDeleting, setIsDeleting] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const locationState = location.state as LoginLocationState | null;
   const destination = locationState?.from && locationState.from !== "/login" ? locationState.from : "/";
+
+  useEffect(() => {
+    const currentWord = heroWords[activeWordIndex];
+    const isWordComplete = activeCharCount >= currentWord.length;
+    const isWordCleared = activeCharCount === 0;
+
+    const timeoutId = window.setTimeout(() => {
+      if (!isDeleting && !isWordComplete) {
+        setActiveCharCount((value) => value + 1);
+        return;
+      }
+
+      if (!isDeleting && isWordComplete) {
+        setIsDeleting(true);
+        return;
+      }
+
+      if (isDeleting && !isWordCleared) {
+        setActiveCharCount((value) => value - 1);
+        return;
+      }
+
+      setIsDeleting(false);
+      setActiveWordIndex((value) => (value + 1) % heroWords.length);
+    }, !isDeleting && !isWordComplete ? 120 : !isDeleting ? 900 : !isWordCleared ? 70 : 250);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [activeWordIndex, activeCharCount, isDeleting]);
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -50,6 +85,8 @@ export default function LoginPage({ onUnlock }: LoginPageProps) {
 
     setError("Koden er ugyldig. Prøv igjen.");
   }
+
+  const activeWord = heroWords[activeWordIndex].slice(0, activeCharCount);
 
   return (
     <div className="crm-auth-shell relative min-h-screen overflow-hidden px-4 py-6 text-slate-950 sm:px-6 lg:px-8">
@@ -68,7 +105,11 @@ export default function LoginPage({ onUnlock }: LoginPageProps) {
             <div className="mt-8 max-w-2xl">
               <p className="text-sm font-semibold uppercase tracking-[0.34em] text-amber-200/80">Support Hub</p>
               <h1 className="mt-4 text-4xl font-semibold tracking-tight text-white sm:text-5xl" style={{ fontFamily: "var(--font-display)" }}>
-                Ett sted for kunder, tickets og oppfølging.
+                <span className="block">Ett sted for</span>
+                <span className="mt-2 block text-teal-200">
+                  {activeWord}
+                  <span className="ml-1 inline-block h-[0.95em] w-[2px] translate-y-1 bg-current align-middle animate-pulse" aria-hidden="true" />
+                </span>
               </h1>
               <p className="mt-5 max-w-xl text-base leading-7 text-slate-300 sm:text-lg">
                 Landingssiden gir rask tilgang til CRM-systemet, mens arbeidsflaten bak holder oversikt over kundedata,
@@ -78,8 +119,8 @@ export default function LoginPage({ onUnlock }: LoginPageProps) {
 
             <div className="mt-10 grid gap-3 md:grid-cols-3">
               {featureCards.map(({ title, description, icon: Icon }) => (
-                <article key={title} className="rounded-2xl border border-white/12 bg-white/6 p-4 backdrop-blur">
-                  <div className="inline-flex rounded-2xl bg-white/10 p-3 text-teal-200">
+                <article key={title} className="rounded-2xl p-4">
+                  <div className="inline-flex rounded-2xl p-3 text-teal-200">
                     <Icon size={18} />
                   </div>
                   <h2 className="mt-4 text-lg font-semibold text-white">{title}</h2>
