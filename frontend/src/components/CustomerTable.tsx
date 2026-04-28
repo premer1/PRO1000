@@ -38,7 +38,7 @@ export default function CustomerTable() {
         const fetchCustomers = async () => {
             try {
                 setLoading(true);
-                const res = await fetch("http://localhost:8080/api/customers?page=0&size=10");
+                const res = await fetch("/api/customers?page=0&size=10");
 
                 if (!res.ok) {
                     throw new Error("Kunne ikke koble til serveren");
@@ -84,7 +84,7 @@ export default function CustomerTable() {
 
         try {
             setSaving(true);
-            const response = await fetch(`http://localhost:8080/api/customers/${editingCustomerId}`, {
+            const response = await fetch(`/api/customers/${editingCustomerId}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(editForm),

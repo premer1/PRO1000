@@ -6,7 +6,7 @@ export function ListCustomers() {
 
     useEffect(() => {
         (async () => {
-            const res = await fetch("http://localhost:8080/api/customers?page=0&size=10");
+            const res = await fetch("/api/customers?page=0&size=10");
             const json = (await res.json()) as PageResponse<Customer>;
             setData(json);
         })();

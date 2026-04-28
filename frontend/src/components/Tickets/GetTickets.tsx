@@ -40,7 +40,7 @@ export function GetTickets() {
 
         useEffect(() => {
             async function loadTickets() {
-                const response = await fetch("http://localhost:8080/api/v1/tickets", {
+                const response = await fetch("/api/v1/tickets", {
                     method: 'GET',
                     headers: {"Content-Type": "application/json"}
                 });

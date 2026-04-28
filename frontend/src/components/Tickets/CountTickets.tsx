@@ -17,10 +17,10 @@ export default function CountTickets() {
             try {
 
                 // Alle fetchene fra databasen for de ulike dataene som ønskes skal vises.
-                const allOpenResponse = await fetch("http://localhost:8080/api/v1/tickets/count/not-closed")
-                const openRespons = await fetch("http://localhost:8080/api/v1/tickets/count?status=OPEN")
-                const waitingResponse = await fetch("http://localhost:8080/api/v1/tickets/count?status=WAITING")
-                const inProgressRespons = await fetch("http://localhost:8080/api/v1/tickets/count?status=IN_PROGRESS")
+                const allOpenResponse = await fetch("/api/v1/tickets/count/not-closed")
+                const openRespons = await fetch("/api/v1/tickets/count?status=OPEN")
+                const waitingResponse = await fetch("/api/v1/tickets/count?status=WAITING")
+                const inProgressRespons = await fetch("/api/v1/tickets/count?status=IN_PROGRESS")
 
                 if (!allOpenResponse.ok || !openRespons.ok || !waitingResponse.ok || !inProgressRespons.ok) {
                     throw new Error("Could not fetch Count");

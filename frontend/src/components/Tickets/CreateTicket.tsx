@@ -27,7 +27,7 @@ export function CreateTickets({ showForm }: CreateTicketsProps) {
     useEffect(() => {
         async function loadCustomers() {
             try {
-                const response = await fetch("http://localhost:8080/api/customers");
+                const response = await fetch("/api/customers");
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch customers");
@@ -72,7 +72,7 @@ export function CreateTickets({ showForm }: CreateTicketsProps) {
 
             console.log("POST DATA:", data);
 
-            const response = await fetch("http://localhost:8080/api/v1/tickets", {
+            const response = await fetch("/api/v1/tickets", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

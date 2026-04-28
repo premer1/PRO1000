@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MainController {
-    @GetMapping({"/", "/home"})
-        public String home(){
-        return "forside";
+    @GetMapping("/api/health")
+    public String health() {
+        return "ok";
     }
 }
