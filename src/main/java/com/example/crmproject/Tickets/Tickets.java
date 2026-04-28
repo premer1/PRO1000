@@ -2,8 +2,6 @@ package com.example.crmproject.Tickets;
 
 import com.example.crmproject.Customer.Customer;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,164 +10,181 @@ import java.time.Instant;
 @Entity
 @Table(name = "Tickets")
 public class Tickets {
-        @Id
-        @GeneratedValue(strategy =
-                GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @Column(name =
-                "ticket_no",
-                nullable = false,
-                unique = true)
-        private Long ticketNo;
+    @Column(name = "ticket_no", nullable = false, unique = true)
+    private Long ticketNo;
 
-        @Column(name =
-                "subject",
-                nullable = false)
-        private String subject;
+    @Column(name = "subject", nullable = false)
+    private String subject;
 
-        @Column(name =
-                "description",
-                nullable = false)
-        private String description;
+    @Column(name = "description", nullable = false, length = 4000)
+    private String description;
 
-        @Column(name = "contact_name", nullable = false)
-        private String contactName;
+    @Column(name = "contact_name", nullable = false)
+    private String contactName;
 
-        @Column(name =
-                "company_Name",
-                nullable = false)
-        private String companyName;
+    @Column(name = "company_Name", nullable = false)
+    private String companyName;
 
-        @Column(name =
-                "email",
-                nullable = false)
-        private String email;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-        @Column(name =
-                "phone",
-                nullable = false)
-        private String phone;
+    @Column(name = "phone", nullable = false)
+    private String phone;
 
-        @ManyToOne(fetch = FetchType.LAZY)
-        @JoinColumn(name = "customer_id")
-        private Customer customer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
+    @CreationTimestamp
+    @Column(name = "created")
+    private Instant created;
 
-        @CreationTimestamp
-        @Column(name =
-                "created")
-        private Instant created;
+    @UpdateTimestamp
+    @Column(name = "updated_last")
+    private Instant updatedLast;
 
-        @UpdateTimestamp
-        @Column(name =
-                "updated_last")
-        private Instant updatedLast;
+    @Column(name = "closed_at")
+    private Instant closedAt;
 
-        public enum TicketStatus {
-                OPEN, IN_PROGRESS, WAITING, CLOSED
-        }
+    public enum TicketStatus {
+        OPEN, IN_PROGRESS, WAITING, CLOSED
+    }
 
-        @Enumerated(EnumType.STRING)
-        @Column(name = "status", nullable = false)
-        private TicketStatus status = TicketStatus.OPEN;
+    public enum TicketPriority {
+        LOW, MEDIUM, HIGH, CRITICAL
+    }
 
-        protected Tickets(){
-        }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private TicketStatus status = TicketStatus.OPEN;
 
-        public Tickets(
-                Long ticketNo,
-                Customer customer,
-                String subject,
-                String description,
-                String contactName,
-                String companyName,
-                String email,
-                String phone,
-                Instant updatedLast,
-                Instant created,
-                TicketStatus status ){
-            this.ticketNo = ticketNo;
-            this.setCustomer( customer );
-            this.description = description;
-            this.subject = subject;
-            this.contactName = contactName;
-            this.companyName = companyName;
-            this.email = email;
-            this.phone = phone;
-            this.updatedLast = updatedLast;
-            this.created = created;
-            this.setStatus(status);
-        }
+    @Enumerated(EnumType.STRING)
+    @Column(name = "priority", nullable = false)
+    private TicketPriority priority = TicketPriority.MEDIUM;
 
-        public Long getId() { return id; }
+    @Column(name = "category", nullable = false)
+    private String category = "General";
 
-        public Long getTicketNo() {return ticketNo;}
-        public void setTicketNo(Long ticketNo)
-        {this.ticketNo = ticketNo;}
+    public Tickets() {
+    }
 
-        public String getSubject() { return subject; }
-        public void setSubject(String subject)
-        {this.subject = subject;}
+    public Long getId() {
+        return id;
+    }
 
-        public String getDescription() {return description;}
-        public void setDescription(String description)
-        {this.description = description;}
+    public Long getTicketNo() {
+        return ticketNo;
+    }
 
-        public String getCompanyName() {return companyName;}
-        public void setCompanyName(String company_Name)
-        {this.companyName = company_Name;}
+    public void setTicketNo(Long ticketNo) {
+        this.ticketNo = ticketNo;
+    }
 
-        public String getEmail() {return email;}
-        public void setEmail(String email)
-        {this.email = email;}
+    public String getSubject() {
+        return subject;
+    }
 
-        public String getPhone() {return phone;}
-        public void setPhone(String phone)
-        {this.phone = phone;}
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
 
-        public record CreateTicketRequest(
-                Long customerId,
-                @NotBlank String description,
-                @NotBlank String subject,
-                @NotBlank String contactName,
-                @NotBlank String companyName,
-                @NotBlank @Email String email,
-                @NotBlank String phone,
-                TicketStatus status
-        ){}
+    public String getDescription() {
+        return description;
+    }
 
-        public String getContactName() {
-                return contactName;
-        }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-        public void setContactName(String contactName) {
-                this.contactName = contactName;
-        }
+    public String getContactName() {
+        return contactName;
+    }
 
-        public Instant getUpdatedLast() {return updatedLast;}
-        public void setUpdatedLast(Instant updatedLast)
-        {this.updatedLast = updatedLast;}
+    public void setContactName(String contactName) {
+        this.contactName = contactName;
+    }
 
-        public Instant getCreated() {return created;}
-        public void setCreated(Instant created)
-        {this.created = created;}
+    public String getCompanyName() {
+        return companyName;
+    }
 
-        public TicketStatus getStatus() {return status;}
-        public void setStatus(TicketStatus status) {
-                if (status == null) {
-                        this.status = TicketStatus.OPEN;
-                        return;
-                }
-                this.status = status;
-        }
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
 
-        public Customer getCustomer() {
-                return customer;
-        }
+    public String getEmail() {
+        return email;
+    }
 
-        public void setCustomer(Customer customer) {
-                this.customer = customer;
-        }
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Instant getCreated() {
+        return created;
+    }
+
+    public void setCreated(Instant created) {
+        this.created = created;
+    }
+
+    public Instant getUpdatedLast() {
+        return updatedLast;
+    }
+
+    public void setUpdatedLast(Instant updatedLast) {
+        this.updatedLast = updatedLast;
+    }
+
+    public TicketStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TicketStatus status) {
+        this.status = status == null ? TicketStatus.OPEN : status;
+    }
+
+    public TicketPriority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(TicketPriority priority) {
+        this.priority = priority == null ? TicketPriority.MEDIUM : priority;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category == null || category.isBlank() ? "General" : category.trim();
+    }
+
+    public Instant getClosedAt() {
+        return closedAt;
+    }
+
+    public void setClosedAt(Instant closedAt) {
+        this.closedAt = closedAt;
+    }
 }
-

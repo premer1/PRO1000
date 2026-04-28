@@ -1,17 +1,17 @@
 package com.example.crmproject.Customer;
 
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/customers")
-@CrossOrigin(origins = "http://localhost:5173", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT})
 public class CustomerController {
 
     private final CustomerService service;
@@ -23,8 +23,15 @@ public class CustomerController {
     }
 
     @GetMapping
-    public Page<Customer> getCustomers(Pageable pageable) {
-        return service.getCustomers(pageable);
+    public Page<CustomerResponse> getCustomers(
+            @RequestParam(required = false) String query,
+            @PageableDefault(size = 10, sort = "companyName", direction = Sort.Direction.ASC) Pageable pageable) {
+        return service.getCustomers(query, pageable);
+    }
+
+    @GetMapping("/lookup")
+    public List<CustomerResponse> getCustomerLookup() {
+        return service.getAll();
     }
 
     @GetMapping("/suggest")
@@ -40,20 +47,25 @@ public class CustomerController {
         return repo.existsByCompanyNameIgnoreCase(companyName);
     }
 
+    @GetMapping("/{id}")
+    public CustomerResponse getById(@PathVariable Long id) {
+        return service.getById(id);
+    }
 
     @PostMapping
-    public Customer create(@RequestBody Customer customer) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public CustomerResponse create(@RequestBody @Valid CustomerRequest customer) {
         return service.create(customer);
     }
 
     @PutMapping("/{id}")
-    public Customer update(@PathVariable Long id, @RequestBody Customer customer) {
+    public CustomerResponse update(@PathVariable Long id, @RequestBody @Valid CustomerRequest customer) {
         return service.update(id, customer);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, String>> handleValidation(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(Map.of("message", ex.getMessage()));
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        service.delete(id);
     }
 }

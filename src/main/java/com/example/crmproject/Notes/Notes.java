@@ -28,7 +28,7 @@ public class Notes {
     @JoinColumn(name = "ticket_id")
     private Tickets ticket;
 
-    protected Notes() {};
+    public Notes() {};
 
     public Notes(
         String text,

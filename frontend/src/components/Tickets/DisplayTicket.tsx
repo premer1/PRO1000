@@ -44,7 +44,6 @@ export default function DisplayTickets() {
 
     const { id } = useParams();
     const [ticket, setTicket] = useState<Ticket | null>(null)
-    const [, setTicketStatus] = useState<TicketStatus | null>(null)
 
     // Fetcher dataen fra databasen slik at den blir vist i bildet når mnan går inn på tickets.
 

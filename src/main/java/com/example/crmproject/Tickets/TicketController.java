@@ -1,8 +1,8 @@
 package com.example.crmproject.Tickets;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 
@@ -14,15 +14,19 @@ public class TicketController {
 
     public TicketController(TicketsService service) {
         this.service = service;
-    };
+    }
 
     @GetMapping
-    public List<Tickets> findAll() {
-        return service.findAll();
+    public List<TicketResponse> findAll(
+            @RequestParam(required = false) String query,
+            @RequestParam(required = false) Tickets.TicketStatus status,
+            @RequestParam(required = false) Tickets.TicketPriority priority,
+            @RequestParam(required = false) Long customerId) {
+        return service.findAll(query, status, priority, customerId);
     }
 
     @GetMapping("/{id}")
-    public Tickets getById(@PathVariable Long id) {
+    public TicketResponse getById(@PathVariable Long id) {
         return service.getById(id);
     }
 
@@ -37,18 +41,20 @@ public class TicketController {
     }
 
     @PostMapping
-    public Tickets create(@Valid @RequestBody Tickets.CreateTicketRequest req) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public TicketResponse create(@Valid @RequestBody TicketRequest req) {
         return service.create(req);
     }
 
-    public record UpdateTicketStatusRequest(Tickets.TicketStatus status) {
+    @PutMapping("/{id}")
+    public TicketResponse update(@PathVariable Long id, @Valid @RequestBody TicketRequest request) {
+        return service.update(id, request);
     }
 
-    @PutMapping("/{id}")
-    public Tickets updateStatus(@PathVariable Long id, @RequestBody UpdateTicketStatusRequest request) {
+    public record UpdateTicketStatusRequest(Tickets.TicketStatus status) {}
+
+    @PatchMapping("/{id}/status")
+    public TicketResponse updateStatus(@PathVariable Long id, @RequestBody UpdateTicketStatusRequest request) {
         return service.updateStatus(id, request.status());
     }
-
-
 }
-

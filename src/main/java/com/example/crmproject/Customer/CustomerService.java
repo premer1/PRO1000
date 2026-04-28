@@ -1,77 +1,176 @@
 package com.example.crmproject.Customer;
 
-import org.springframework.stereotype.Service;
-
-import java.util.List;
+import com.example.crmproject.Common.ApiException;
+import com.example.crmproject.Tickets.Tickets;
+import com.example.crmproject.Tickets.TicketsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Locale;
 
 @Service
 public class CustomerService {
 
     private final CustomerRepository repo;
+    private final TicketsRepository ticketsRepository;
 
-    public CustomerService(CustomerRepository repo) {
+    public CustomerService(CustomerRepository repo, TicketsRepository ticketsRepository) {
         this.repo = repo;
+        this.ticketsRepository = ticketsRepository;
     }
 
-    public List<Customer> getAll() {
-        return (List<Customer>) repo.findAll();
+    @Transactional(readOnly = true)
+    public List<CustomerResponse> getAll() {
+        return repo.findAll().stream()
+                .map(this::toResponse)
+                .toList();
     }
 
-    // Her legges inn validering av kunder og søking på kunder
+    @Transactional
+    public CustomerResponse create(CustomerRequest request) {
+        validateUniqueFields(request, null);
+        Customer customer = new Customer(
+                normalize(request.customerNo()),
+                normalize(request.companyName()),
+                normalize(request.firstName()),
+                normalize(request.lastName()),
+                normalize(request.email()).toLowerCase(),
+                normalize(request.phone())
+        );
+        return toResponse(repo.save(customer));
+    }
 
-    public Customer create(Customer customer) {
-        validateCustomerNo(customer.getCustomerNo());
-        if (repo.existsByCustomerNo(customer.getCustomerNo())) {
-            throw new IllegalArgumentException("Kundenummeret eksisterer allerede");
+    @Transactional(readOnly = true)
+    public CustomerResponse getById(Long id) {
+        return toResponse(getEntity(id));
+    }
+
+    @Transactional(readOnly = true)
+    public Customer getEntity(Long id) {
+        return repo.findById(id)
+                .orElseThrow(() -> new ApiException(HttpStatus.NOT_FOUND, "Fant ikke kunde med id " + id));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<CustomerResponse> getCustomers(String query, Pageable pageable) {
+        String normalizedQuery = normalizeNullable(query);
+        if (normalizedQuery == null) {
+            return repo.findAll(pageable).map(this::toResponse);
         }
-        return repo.save(customer);
-    }
-    public Customer getByCustomerNo(String customerNo) {
-        return repo.findByCustomerNo(customerNo)
-                .orElseThrow(() -> new IllegalArgumentException("Fant ikke kundenummer med kundenummer " + customerNo));
-    }
-    public Page<Customer> getCustomers(Pageable pageable) {
-        return repo.findAll(pageable);
+
+        return repo.findAll(buildSearchSpecification(normalizedQuery), pageable).map(this::toResponse);
     }
 
-    public Customer update(Long id, Customer input) {
-        Customer existing = repo.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Fant ikke kunde med id " + id));
+    @Transactional
+    public CustomerResponse update(Long id, CustomerRequest request) {
+        Customer existing = getEntity(id);
+        validateUniqueFields(request, id);
 
-        validateCustomerNo(input.getCustomerNo());
+        existing.setCustomerNo(normalize(request.customerNo()));
+        existing.setCompanyName(normalize(request.companyName()));
+        existing.setFirstName(normalize(request.firstName()));
+        existing.setLastName(normalize(request.lastName()));
+        existing.setEmail(normalize(request.email()).toLowerCase());
+        existing.setPhone(normalize(request.phone()));
 
-        if (repo.existsByCustomerNoAndIdNot(input.getCustomerNo(), id)) {
-            throw new IllegalArgumentException("Kundenummeret eksisterer allerede");
+        return toResponse(repo.save(existing));
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        Customer customer = getEntity(id);
+        List<Tickets> relatedTickets = ticketsRepository.findAllByCustomerId(id);
+        for (Tickets ticket : relatedTickets) {
+            ticket.setCustomer(null);
         }
-        if (repo.existsByEmailAndIdNot(input.getEmail(), id)) {
-            throw new IllegalArgumentException("E-postadressen eksisterer allerede");
-        }
-        if (repo.existsByPhoneAndIdNot(input.getPhone(), id)) {
-            throw new IllegalArgumentException("Telefonnummeret eksisterer allerede");
-        }
-
-        existing.setCustomerNo(input.getCustomerNo());
-        existing.setCompanyName(input.getCompanyName());
-        existing.setFirstName(input.getFirstName());
-        existing.setLastName(input.getLastName());
-        existing.setEmail(input.getEmail());
-        existing.setPhone(input.getPhone());
-
-        return repo.save(existing);
+        ticketsRepository.saveAll(relatedTickets);
+        repo.delete(customer);
     }
 
     private void validateCustomerNo(String customerNo) {
         try {
             int customerNoAsInt = Integer.parseInt(customerNo);
             if (customerNoAsInt < 10000) {
-                throw new IllegalArgumentException("Kundenummerserien starter på 10000");
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Kundenummerserien starter på 10000");
             }
         } catch (NumberFormatException ex) {
-            throw new IllegalArgumentException("Kundenummer må være et gyldig tall");
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Kundenummer må være et gyldig tall");
         }
     }
 
+    private void validateUniqueFields(CustomerRequest request, Long customerId) {
+        String customerNo = normalize(request.customerNo());
+        String email = normalize(request.email()).toLowerCase();
+        String phone = normalize(request.phone());
+
+        validateCustomerNo(customerNo);
+
+        if (customerId == null) {
+            if (repo.existsByCustomerNo(customerNo)) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Kundenummeret eksisterer allerede");
+            }
+            if (repo.existsByEmail(email)) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "E-postadressen eksisterer allerede");
+            }
+            if (repo.existsByPhone(phone)) {
+                throw new ApiException(HttpStatus.BAD_REQUEST, "Telefonnummeret eksisterer allerede");
+            }
+            return;
+        }
+
+        if (repo.existsByCustomerNoAndIdNot(customerNo, customerId)) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Kundenummeret eksisterer allerede");
+        }
+        if (repo.existsByEmailAndIdNot(email, customerId)) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "E-postadressen eksisterer allerede");
+        }
+        if (repo.existsByPhoneAndIdNot(phone, customerId)) {
+            throw new ApiException(HttpStatus.BAD_REQUEST, "Telefonnummeret eksisterer allerede");
+        }
+    }
+
+    private String normalize(String value) {
+        return value == null ? "" : value.trim();
+    }
+
+    private String normalizeNullable(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String normalized = value.trim();
+        return normalized.isEmpty() ? null : normalized;
+    }
+
+    private Specification<Customer> buildSearchSpecification(String query) {
+        String likeQuery = "%" + query.toLowerCase(Locale.ROOT) + "%";
+
+        return (root, ignoredQuery, criteriaBuilder) -> criteriaBuilder.or(
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("customerNo")), likeQuery),
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("companyName")), likeQuery),
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("firstName")), likeQuery),
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("lastName")), likeQuery),
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("email")), likeQuery),
+                criteriaBuilder.like(criteriaBuilder.lower(root.get("phone")), likeQuery)
+        );
+    }
+
+    private CustomerResponse toResponse(Customer customer) {
+        return new CustomerResponse(
+                customer.getId(),
+                customer.getCustomerNo(),
+                customer.getCompanyName(),
+                customer.getFirstName(),
+                customer.getLastName(),
+                customer.getEmail(),
+                customer.getPhone(),
+                customer.getCreatedAt(),
+                customer.getUpdatedAt()
+        );
+    }
 }

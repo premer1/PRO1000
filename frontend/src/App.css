@@ -1,0 +1,46 @@
+.crm-auth-shell {
+  background:
+    radial-gradient(circle at top left, rgba(246, 173, 85, 0.2), transparent 34%),
+    radial-gradient(circle at 86% 22%, rgba(15, 118, 110, 0.18), transparent 28%),
+    linear-gradient(140deg, #f2ede4 0%, #f5f8fb 52%, #eef6f5 100%);
+}
+
+.crm-auth-grid {
+  background-image:
+    linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+  background-size: 72px 72px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.75), transparent);
+}
+
+.crm-auth-orb {
+  filter: blur(12px);
+  opacity: 0.75;
+  animation: crm-auth-float 16s ease-in-out infinite;
+}
+
+.crm-auth-orb-one {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(245, 158, 11, 0) 72%);
+}
+
+.crm-auth-orb-two {
+  background: radial-gradient(circle, rgba(15, 118, 110, 0.24) 0%, rgba(15, 118, 110, 0) 74%);
+  animation-delay: -7s;
+}
+
+@keyframes crm-auth-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(0, -18px, 0) scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crm-auth-orb {
+    animation: none;
+  }
+}
