@@ -24,7 +24,7 @@ export default function AddCustomer({ isOpen, onClose, onCustomerAdded }: ModalP
         e.preventDefault();
 
         try {
-            const response = await fetch('http://localhost:8080/api/customers', {
+            const response = await fetch('/api/customers', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 // 3. RETTELSE: Endret fra {formDaa} til formData

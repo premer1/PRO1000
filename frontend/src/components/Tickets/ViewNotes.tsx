@@ -14,7 +14,7 @@ export default function ViewNotes() {
     useEffect(() => {
         async function displayNotes() {
             try {
-                const response = await fetch(`http://localhost:8080/api/v1/tickets/${id}/notes`);
+                const response = await fetch(`/api/v1/tickets/${id}/notes`);
 
                 if (!response.ok) {
                     throw new Error("Failed to fetch notes");

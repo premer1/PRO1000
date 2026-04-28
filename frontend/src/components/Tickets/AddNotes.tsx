@@ -17,7 +17,7 @@ export default function TicketNotes() {
     // Fetch på Notes fra databasen.
     const displayNotes = useCallback(async () => {
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/tickets/${id}/notes`);
+            const response = await fetch(`/api/v1/tickets/${id}/notes`);
             if (!response.ok) throw new Error("failed to fetch notes");
             const data = await response.json();
             setNotes(data);
@@ -29,7 +29,7 @@ export default function TicketNotes() {
     async function handleSubmit() {
         try {
             // Sender POST request med opprettet ticket.
-            const response = await fetch(`http://localhost:8080/api/v1/tickets/${id}/notes`, {
+            const response = await fetch(`/api/v1/tickets/${id}/notes`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ text }),

@@ -13,15 +13,21 @@ export async function apiFetch<T>(path: string, options: RequestInit = {}): Prom
     let message = "En feil oppstod under kommunikasjon med serveren";
 
     try {
-      const body = (await response.json()) as { message?: string };
-      if (body.message) {
-        message = body.message;
+      const text = await response.text();
+      try {
+        const body = JSON.parse(text) as { message?: string };
+        if (body.message) {
+          message = body.message;
+        } else if (text) {
+          message = text;
+        }
+      } catch {
+        if (text) {
+          message = text;
+        }
       }
     } catch {
-      const text = await response.text();
-      if (text) {
-        message = text;
-      }
+      // body could not be read
     }
 
     throw new Error(message);
