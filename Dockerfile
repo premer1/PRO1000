@@ -7,15 +7,14 @@ RUN npm ci
 COPY frontend/ ./
 RUN npm run build
 
-FROM eclipse-temurin:21-jdk-alpine AS backend-build
+FROM maven:3.9-eclipse-temurin-21-alpine AS backend-build
 WORKDIR /workspace
 
-COPY .mvn/ .mvn/
-COPY mvnw pom.xml ./
+COPY pom.xml ./
 COPY src/ src/
 COPY --from=frontend-build /workspace/frontend/dist/ src/main/resources/static/
 
-RUN ./mvnw -DskipTests package
+RUN mvn -DskipTests package
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
