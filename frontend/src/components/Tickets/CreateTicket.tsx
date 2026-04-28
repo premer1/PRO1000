@@ -163,7 +163,7 @@ export function CreateTickets({ showForm }: CreateTicketsProps) {
                     <option value="CLOSED">Lukket</option>
                 </select>
 
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Opprett Ticket</Button>
             </Field>
         </form>
     );

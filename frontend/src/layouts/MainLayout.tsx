@@ -16,7 +16,7 @@ export default function MainLayout({ onLogout }: MainLayoutProps) {
 
   return (
     <div className="min-h-screen bg-[var(--crm-bg)] text-[var(--crm-text)]">
-      <div className="mx-auto flex min-h-screen max-w-[1600px]">
+      <div className="flex min-h-screen">
         <aside className="hidden w-80 border-r border-[var(--crm-sidebar-border)] bg-[var(--crm-sidebar)] md:block">
           <Sidebar />
         </aside>
