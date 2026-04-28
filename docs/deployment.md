@@ -20,9 +20,16 @@ DB_PASSWORD=<passord>
 APP_SEED_DEMO_DATA=true
 AI_API_KEY=<valgfritt>
 AI_MODEL=gpt-4.1-mini
+APP_CORS_ALLOWED_ORIGINS=https://<frontend-domenet>
+APP_CORS_ALLOWED_ORIGIN_PATTERNS=https://*.up.railway.app
 ```
 
 Ikke sett `VITE_API_BASE_URL` når frontend og backend ligger på samme domene.
+
+Hvis frontend og backend ligger på ulike Railway-domener, må backend tillate
+frontend-originen. Bruk `APP_CORS_ALLOWED_ORIGINS` for eksakte domener, for
+eksempel `https://crm.example.no`. Standardoppsettet tillater også Railway sine
+genererte `https://*.up.railway.app`-domener via `APP_CORS_ALLOWED_ORIGIN_PATTERNS`.
 
 ## Sjekkliste
 
