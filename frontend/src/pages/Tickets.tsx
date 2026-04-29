@@ -130,7 +130,7 @@ export default function Tickets() {
   }
 
   function applyPreset(
-    status: TicketStatus | "ALL",
+    status: TicketStatus | "OPEN",
     priority: TicketPriority | "ALL" = "ALL",
   ) {
     setStatusFilter(status);
@@ -169,7 +169,7 @@ export default function Tickets() {
                 type="button"
                 onClick={() => {
                   setQuery("");
-                  applyPreset("ALL");
+                  applyPreset("OPEN");
                 }}
                 className="rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
               >
