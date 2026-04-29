@@ -7,13 +7,22 @@ import StatusBadge from "@/components/StatusBadge";
 import TicketFormModal from "@/components/TicketFormModal";
 import { apiFetch, buildQuery } from "@/lib/api";
 import { formatDateTime } from "@/lib/format";
-import type { Customer, Ticket, TicketPriority, TicketStatus } from "@/types/crm";
+import type {
+  Customer,
+  Ticket,
+  TicketPriority,
+  TicketStatus,
+} from "@/types/crm";
 
 function TicketStatCard({ label, value }: { label: string; value: number }) {
   return (
     <div className="rounded-md border border-slate-200 bg-white p-3">
-      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">{label}</p>
-      <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">{value}</p>
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+        {label}
+      </p>
+      <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-950">
+        {value}
+      </p>
     </div>
   );
 }
@@ -22,8 +31,12 @@ export default function Tickets() {
   const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const deferredQuery = useDeferredValue(query);
-  const [statusFilter, setStatusFilter] = useState<TicketStatus | "ALL">("ALL");
-  const [priorityFilter, setPriorityFilter] = useState<TicketPriority | "ALL">("ALL");
+  const [statusFilter, setStatusFilter] = useState<TicketStatus | "OPEN">(
+    "OPEN",
+  );
+  const [priorityFilter, setPriorityFilter] = useState<TicketPriority | "ALL">(
+    "ALL",
+  );
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -72,13 +85,17 @@ export default function Tickets() {
         if (!ignore) {
           setTickets(
             [...data].sort(
-              (left, right) => new Date(right.updatedLast).getTime() - new Date(left.updatedLast).getTime(),
+              (left, right) =>
+                new Date(right.updatedLast).getTime() -
+                new Date(left.updatedLast).getTime(),
             ),
           );
         }
       } catch (err) {
         if (!ignore) {
-          setError(err instanceof Error ? err.message : "Kunne ikke hente tickets");
+          setError(
+            err instanceof Error ? err.message : "Kunne ikke hente tickets",
+          );
         }
       } finally {
         if (!ignore) {
@@ -95,29 +112,50 @@ export default function Tickets() {
 
   async function handleStatusChange(ticketId: number, status: TicketStatus) {
     try {
-      const updated = await apiFetch<Ticket>(`/api/v1/tickets/${ticketId}/status`, {
-        method: "PATCH",
-        body: JSON.stringify({ status }),
-      });
-      setTickets((current) => current.map((ticket) => (ticket.id === updated.id ? updated : ticket)));
+      const updated = await apiFetch<Ticket>(
+        `/api/v1/tickets/${ticketId}/status`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({ status }),
+        },
+      );
+      setTickets((current) =>
+        current.map((ticket) => (ticket.id === updated.id ? updated : ticket)),
+      );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Kunne ikke oppdatere status");
+      setError(
+        err instanceof Error ? err.message : "Kunne ikke oppdatere status",
+      );
     }
   }
 
-  function applyPreset(status: TicketStatus | "ALL", priority: TicketPriority | "ALL" = "ALL") {
+  function applyPreset(
+    status: TicketStatus | "ALL",
+    priority: TicketPriority | "ALL" = "ALL",
+  ) {
     setStatusFilter(status);
     setPriorityFilter(priority);
   }
 
-  const activeTickets = tickets.filter((ticket) => ticket.status !== "CLOSED").length;
-  const criticalTickets = tickets.filter((ticket) => ticket.priority === "CRITICAL" && ticket.status !== "CLOSED").length;
-  const waitingTickets = tickets.filter((ticket) => ticket.status === "WAITING").length;
-  const inProgressTickets = tickets.filter((ticket) => ticket.status === "IN_PROGRESS").length;
+  const activeTickets = tickets.filter(
+    (ticket) => ticket.status !== "CLOSED",
+  ).length;
+  const criticalTickets = tickets.filter(
+    (ticket) => ticket.priority === "CRITICAL" && ticket.status !== "CLOSED",
+  ).length;
+  const waitingTickets = tickets.filter(
+    (ticket) => ticket.status === "WAITING",
+  ).length;
+  const inProgressTickets = tickets.filter(
+    (ticket) => ticket.status === "IN_PROGRESS",
+  ).length;
   const urgentQueue = tickets.filter(
-    (ticket) => ticket.status !== "CLOSED" && (ticket.priority === "CRITICAL" || ticket.priority === "HIGH"),
+    (ticket) =>
+      ticket.status !== "CLOSED" &&
+      (ticket.priority === "CRITICAL" || ticket.priority === "HIGH"),
   );
-  const filtersActive = query.length > 0 || statusFilter !== "ALL" || priorityFilter !== "ALL";
+  const filtersActive =
+    query.length > 0 || statusFilter !== "ALL" || priorityFilter !== "ALL";
 
   return (
     <div className="space-y-6">
@@ -164,7 +202,9 @@ export default function Tickets() {
           <div className="space-y-4">
             <div className="rounded-lg border border-[var(--crm-border)] bg-white p-4">
               <div className="mb-5 flex items-center justify-between gap-4">
-                <h2 className="text-lg font-semibold text-slate-950">Prioritert kø</h2>
+                <h2 className="text-lg font-semibold text-slate-950">
+                  Prioritert kø
+                </h2>
                 <div className="rounded-full bg-red-50 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-red-700">
                   {urgentQueue.length}
                 </div>
@@ -184,9 +224,14 @@ export default function Tickets() {
                           <p className="text-sm font-semibold text-slate-950">
                             #{ticket.ticketNo} {ticket.subject}
                           </p>
-                          <p className="mt-1 text-sm text-slate-500">{ticket.companyName}</p>
+                          <p className="mt-1 text-sm text-slate-500">
+                            {ticket.companyName}
+                          </p>
                         </div>
-                        <TriangleAlert size={16} className="mt-1 text-red-400" />
+                        <TriangleAlert
+                          size={16}
+                          className="mt-1 text-red-400"
+                        />
                       </div>
                       <div className="mt-3 flex flex-wrap gap-2">
                         <StatusBadge status={ticket.status} />
@@ -195,19 +240,29 @@ export default function Tickets() {
                     </button>
                   ))
                 ) : (
-                  <div className="rounded-md border border-dashed border-slate-200 p-3 text-sm text-slate-500">Ingen saker</div>
+                  <div className="rounded-md border border-dashed border-slate-200 p-3 text-sm text-slate-500">
+                    Ingen saker
+                  </div>
                 )}
               </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-1">
               <div className="rounded-md border border-[var(--crm-border)] bg-white p-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Ventende</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-950">{waitingTickets}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  Ventende
+                </p>
+                <p className="mt-2 text-2xl font-semibold text-slate-950">
+                  {waitingTickets}
+                </p>
               </div>
               <div className="rounded-md border border-[var(--crm-border)] bg-white p-3">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">Kritiske</p>
-                <p className="mt-2 text-2xl font-semibold text-slate-950">{criticalTickets}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  Kritiske
+                </p>
+                <p className="mt-2 text-2xl font-semibold text-slate-950">
+                  {criticalTickets}
+                </p>
               </div>
             </div>
           </div>
@@ -232,7 +287,10 @@ export default function Tickets() {
 
             <div className="grid gap-3 lg:grid-cols-[1.2fr_0.4fr_0.4fr]">
               <label className="relative block">
-                <Search size={16} className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                <Search
+                  size={16}
+                  className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+                />
                 <input
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
@@ -242,7 +300,9 @@ export default function Tickets() {
               </label>
               <select
                 value={statusFilter}
-                onChange={(event) => setStatusFilter(event.target.value as TicketStatus | "ALL")}
+                onChange={(event) =>
+                  setStatusFilter(event.target.value as TicketStatus | "ALL")
+                }
                 className="h-10 rounded-md border border-slate-200 px-3 text-sm outline-none transition focus:border-slate-400"
               >
                 <option value="ALL">Alle statuser</option>
@@ -253,7 +313,11 @@ export default function Tickets() {
               </select>
               <select
                 value={priorityFilter}
-                onChange={(event) => setPriorityFilter(event.target.value as TicketPriority | "ALL")}
+                onChange={(event) =>
+                  setPriorityFilter(
+                    event.target.value as TicketPriority | "ALL",
+                  )
+                }
                 className="h-10 rounded-md border border-slate-200 px-3 text-sm outline-none transition focus:border-slate-400"
               >
                 <option value="ALL">Alle prioriteter</option>
@@ -266,20 +330,44 @@ export default function Tickets() {
 
             <div className="flex flex-wrap gap-2">
               {[
-                { label: "Alle", status: "ALL" as const, priority: "ALL" as const },
-                { label: "Ventende", status: "WAITING" as const, priority: "ALL" as const },
-                { label: "Pågår", status: "IN_PROGRESS" as const, priority: "ALL" as const },
-                { label: "Kritiske", status: "ALL" as const, priority: "CRITICAL" as const },
-                { label: "Lukkede", status: "CLOSED" as const, priority: "ALL" as const },
+                {
+                  label: "Alle",
+                  status: "ALL" as const,
+                  priority: "ALL" as const,
+                },
+                {
+                  label: "Ventende",
+                  status: "WAITING" as const,
+                  priority: "ALL" as const,
+                },
+                {
+                  label: "Pågår",
+                  status: "IN_PROGRESS" as const,
+                  priority: "ALL" as const,
+                },
+                {
+                  label: "Kritiske",
+                  status: "ALL" as const,
+                  priority: "CRITICAL" as const,
+                },
+                {
+                  label: "Lukkede",
+                  status: "CLOSED" as const,
+                  priority: "ALL" as const,
+                },
               ].map((preset) => {
-                const active = statusFilter === preset.status && priorityFilter === preset.priority;
+                const active =
+                  statusFilter === preset.status &&
+                  priorityFilter === preset.priority;
                 return (
                   <button
                     key={preset.label}
                     type="button"
                     onClick={() => applyPreset(preset.status, preset.priority)}
                     className={`rounded-full px-4 py-2 text-sm font-medium transition ${
-                      active ? "bg-slate-950 text-white" : "border border-slate-200 text-slate-700 hover:bg-slate-50"
+                      active
+                        ? "bg-slate-950 text-white"
+                        : "border border-slate-200 text-slate-700 hover:bg-slate-50"
                     }`}
                   >
                     {preset.label}
@@ -303,21 +391,36 @@ export default function Tickets() {
             </div>
           </div>
 
-          {error ? <div className="mt-5 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</div> : null}
+          {error ? (
+            <div className="mt-5 rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {error}
+            </div>
+          ) : null}
 
           <div className="mt-5 space-y-3 lg:hidden">
             {loading ? (
-              <div className="rounded-md border border-slate-200 p-4 text-center text-sm text-slate-500">Laster...</div>
+              <div className="rounded-md border border-slate-200 p-4 text-center text-sm text-slate-500">
+                Laster...
+              </div>
             ) : tickets.length ? (
               tickets.map((ticket) => (
-                <div key={ticket.id} className="rounded-md border border-slate-200 p-3">
-                  <button type="button" onClick={() => navigate(`/tickets/${ticket.id}`)} className="w-full text-left">
+                <div
+                  key={ticket.id}
+                  className="rounded-md border border-slate-200 p-3"
+                >
+                  <button
+                    type="button"
+                    onClick={() => navigate(`/tickets/${ticket.id}`)}
+                    className="w-full text-left"
+                  >
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <p className="text-sm font-semibold text-slate-950">
                           #{ticket.ticketNo} {ticket.subject}
                         </p>
-                        <p className="mt-1 text-sm text-slate-500">{ticket.companyName}</p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {ticket.companyName}
+                        </p>
                       </div>
                       <Clock3 size={16} className="mt-1 text-slate-300" />
                     </div>
@@ -345,7 +448,9 @@ export default function Tickets() {
                     {ticket.status !== "CLOSED" ? (
                       <button
                         type="button"
-                        onClick={() => void handleStatusChange(ticket.id, "CLOSED")}
+                        onClick={() =>
+                          void handleStatusChange(ticket.id, "CLOSED")
+                        }
                         className="flex-1 rounded-md border border-emerald-200 px-3 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50"
                       >
                         Lukk
@@ -353,7 +458,9 @@ export default function Tickets() {
                     ) : (
                       <button
                         type="button"
-                        onClick={() => void handleStatusChange(ticket.id, "OPEN")}
+                        onClick={() =>
+                          void handleStatusChange(ticket.id, "OPEN")
+                        }
                         className="flex-1 rounded-md border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                       >
                         Gjenåpne
@@ -363,7 +470,9 @@ export default function Tickets() {
                 </div>
               ))
             ) : (
-              <div className="rounded-md border border-dashed border-slate-200 p-4 text-center text-sm text-slate-500">Ingen treff</div>
+              <div className="rounded-md border border-dashed border-slate-200 p-4 text-center text-sm text-slate-500">
+                Ingen treff
+              </div>
             )}
           </div>
 
@@ -377,19 +486,27 @@ export default function Tickets() {
                   <th className="px-4 py-3 font-semibold">Status</th>
                   <th className="px-4 py-3 font-semibold">Prioritet</th>
                   <th className="px-4 py-3 font-semibold">Oppdatert</th>
-                  <th className="px-4 py-3 font-semibold text-right">Handlinger</th>
+                  <th className="px-4 py-3 font-semibold text-right">
+                    Handlinger
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-sm text-slate-500">
+                    <td
+                      colSpan={7}
+                      className="px-4 py-12 text-center text-sm text-slate-500"
+                    >
                       Laster...
                     </td>
                   </tr>
                 ) : tickets.length ? (
                   tickets.map((ticket) => (
-                    <tr key={ticket.id} className="border-t border-slate-200 text-sm transition hover:bg-slate-50">
+                    <tr
+                      key={ticket.id}
+                      className="border-t border-slate-200 text-sm transition hover:bg-slate-50"
+                    >
                       <td className="px-4 py-4 align-top">
                         <button
                           type="button"
@@ -399,15 +516,21 @@ export default function Tickets() {
                           #{ticket.ticketNo} {ticket.subject}
                         </button>
                       </td>
-                      <td className="px-4 py-4 align-top text-slate-600">{ticket.companyName}</td>
-                      <td className="px-4 py-4 align-top text-slate-600">{ticket.category}</td>
+                      <td className="px-4 py-4 align-top text-slate-600">
+                        {ticket.companyName}
+                      </td>
+                      <td className="px-4 py-4 align-top text-slate-600">
+                        {ticket.category}
+                      </td>
                       <td className="px-4 py-4 align-top">
                         <StatusBadge status={ticket.status} />
                       </td>
                       <td className="px-4 py-4 align-top">
                         <PriorityBadge priority={ticket.priority} />
                       </td>
-                      <td className="px-4 py-4 align-top text-slate-600">{formatDateTime(ticket.updatedLast)}</td>
+                      <td className="px-4 py-4 align-top text-slate-600">
+                        {formatDateTime(ticket.updatedLast)}
+                      </td>
                       <td className="px-4 py-4 align-top">
                         <div className="flex justify-end gap-2">
                           <button
@@ -423,7 +546,9 @@ export default function Tickets() {
                           {ticket.status !== "CLOSED" ? (
                             <button
                               type="button"
-                              onClick={() => void handleStatusChange(ticket.id, "CLOSED")}
+                              onClick={() =>
+                                void handleStatusChange(ticket.id, "CLOSED")
+                              }
                               className="rounded-xl border border-emerald-200 px-3 py-2 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50"
                             >
                               Lukk
@@ -431,7 +556,9 @@ export default function Tickets() {
                           ) : (
                             <button
                               type="button"
-                              onClick={() => void handleStatusChange(ticket.id, "OPEN")}
+                              onClick={() =>
+                                void handleStatusChange(ticket.id, "OPEN")
+                              }
                               className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-700 transition hover:bg-slate-100"
                             >
                               Gjenåpne
@@ -443,7 +570,10 @@ export default function Tickets() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-4 py-12 text-center text-sm text-slate-500">
+                    <td
+                      colSpan={7}
+                      className="px-4 py-12 text-center text-sm text-slate-500"
+                    >
                       Ingen treff
                     </td>
                   </tr>
