@@ -77,7 +77,7 @@ export default function Tickets() {
         const data = await apiFetch<Ticket[]>(
           `/api/v1/tickets${buildQuery({
             query: deferredQuery || undefined,
-            status: statusFilter === "ALL" ? undefined : statusFilter,
+            status: statusFilter === "OPEN" ? undefined : statusFilter,
             priority: priorityFilter === "ALL" ? undefined : priorityFilter,
           })}`,
         );
@@ -155,7 +155,7 @@ export default function Tickets() {
       (ticket.priority === "CRITICAL" || ticket.priority === "HIGH"),
   );
   const filtersActive =
-    query.length > 0 || statusFilter !== "ALL" || priorityFilter !== "ALL";
+    query.length > 0 || statusFilter !== "OPEN" || priorityFilter !== "ALL";
 
   return (
     <div className="space-y-6">
@@ -301,7 +301,7 @@ export default function Tickets() {
               <select
                 value={statusFilter}
                 onChange={(event) =>
-                  setStatusFilter(event.target.value as TicketStatus | "ALL")
+                  setStatusFilter(event.target.value as TicketStatus | "OPEN")
                 }
                 className="h-10 rounded-md border border-slate-200 px-3 text-sm outline-none transition focus:border-slate-400"
               >
